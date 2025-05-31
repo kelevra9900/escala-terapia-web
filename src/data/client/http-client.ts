@@ -22,7 +22,7 @@ Axios.interceptors.request.use((config: any) => {
 	const cookies = Cookies.get(AUTH_TOKEN_KEY)
 	let token = ''
 	if (cookies) {
-		token = JSON.parse(cookies)['access_token']
+		token = cookies
 	}
 
 	config.headers = {

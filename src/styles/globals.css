@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/aspect-ratio";
+
 @theme {
   --font-inter: "Inter", sans-serif;
   --font-playfair: "Playfair Display", serif;

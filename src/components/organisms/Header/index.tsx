@@ -9,6 +9,7 @@ import {AvatarDropdown,LangDropdown} from "@/components/molecules";
 import MenuBar from "../Menu";
 
 import {useThemeMode} from '@/hooks/useThemeMode';
+import {useGetMeInfo} from "@/data/user";
 
 interface HeaderProps {
 	className?: string;

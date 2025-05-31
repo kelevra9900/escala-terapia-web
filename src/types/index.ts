@@ -45,6 +45,27 @@ enum UserRole {
 }
 
 
+export type UserListItem = {
+	id: string;
+	name: string;
+	email: string;
+	role: 'ADMIN' | 'THERAPIST' | 'CLIENT';
+	isActive: boolean;
+	subscriptionStatus: 'ACTIVE' | 'INACTIVE';
+	createdAt: string; // ISO date string
+};
+
+export type PaginatedResponse<T> = {
+	data: T[];
+	meta: {
+		totalCount: number;
+		totalPages: number;
+		currentPage: number;
+		pageSize: number;
+	};
+};
+
+
 export interface PricingItemInterface {
 	isPopular: boolean
 	name: string

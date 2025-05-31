@@ -13,6 +13,7 @@ export interface AvatarProps {
 	userName?: string
 	hasChecked?: boolean
 	hasCheckedClass?: string
+	src?: string | StaticImageData
 }
 
 const Avatar: FC<AvatarProps> = ({

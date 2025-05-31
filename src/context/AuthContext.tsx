@@ -19,6 +19,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 	const {data: user,isSuccess} = useGetMeInfo();
 
 	const login = (data: LoginResponseSuccess) => {
+		console.log('Login successful:',data);
 		Cookies.set(AUTH_CRED,data.access_token);
 	};
 

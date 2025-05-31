@@ -26,7 +26,7 @@ interface Props {
 export default function AvatarDropdown({className = ''}: Props) {
 	return (
 		<>
-			<Popover className={`AvatarDropdown relative flex ${className}`}>
+			<Popover className={`relative flex ${className}`}>
 				{({open,close}) => (
 					<>
 						<PopoverButton
@@ -44,7 +44,7 @@ export default function AvatarDropdown({className = ''}: Props) {
 							leaveTo="opacity-0 translate-y-1"
 						>
 							<PopoverPanel className="absolute -end-10 top-full z-10 w-screen max-w-[260px] px-4 sm:end-0 sm:px-0">
-								<div className="overflow-hidden rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
+								<div className="overflow-hidden rounded-3xl shadow-lg">
 									<div className="relative grid grid-cols-1 gap-6 bg-white px-6 py-7 dark:bg-neutral-800">
 										<div className="flex items-center gap-x-3">
 											<Avatar sizeClass="w-12 h-12" />
