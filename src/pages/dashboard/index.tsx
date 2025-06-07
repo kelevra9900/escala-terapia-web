@@ -30,8 +30,8 @@ const AdminDashboard = () => {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			setDebouncedSearch(search);
-			setPage(1); // Reinicia a la primera página cuando cambia la búsqueda
-		},500); // 500ms de espera
+			setPage(1);
+		},500);
 
 		return () => clearTimeout(timeout);
 	},[search]);

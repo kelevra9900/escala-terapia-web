@@ -1,14 +1,11 @@
 import {useMutation,useQuery,useQueryClient} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
-import Cookies from 'js-cookie';
 
 import {User,LoginInput,LoginResponseSuccess,PaginatedResponse,UserListItem} from '@/types';
 import {userClient} from './client/user';
 import {getFormErrors} from './client/http-client';
 import {useAuth} from '@/context/AuthContext';
 import {showError,showSuccess} from '@/utils/toasts';
-import {AUTH_CRED} from '@/utils/constants';
-import {useEffect,useState} from 'react';
 
 export const useLoginMutation = () => {
 	const queryClient = useQueryClient();
@@ -16,7 +13,7 @@ export const useLoginMutation = () => {
 
 	return useMutation<LoginResponseSuccess,AxiosError,LoginInput>({
 		mutationFn: userClient.login,
-		onSuccess: (data) => {
+		onSuccess: async (data) => {
 			login(data);
 			queryClient.invalidateQueries({queryKey: ['me']});
 			showSuccess('Inicio de sesión exitoso');
@@ -29,18 +26,10 @@ export const useLoginMutation = () => {
 	});
 };
 
-
 export const useGetMeInfo = () => {
-	const [enabled,setEnabled] = useState(false);
-
-	useEffect(() => {
-		setEnabled(!!Cookies.get(AUTH_CRED));
-	},[]);
-
 	return useQuery<User>({
 		queryKey: ['me'],
 		queryFn: userClient.getMe,
-		enabled,
 		retry: false,
 		staleTime: 1000 * 60 * 5,
 	});

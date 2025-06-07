@@ -10,6 +10,7 @@ import MenuBar from "../Menu";
 
 import {useThemeMode} from '@/hooks/useThemeMode';
 import {useGetMeInfo} from "@/data/user";
+import Link from "next/link";
 
 interface HeaderProps {
 	className?: string;
@@ -19,7 +20,9 @@ const Header = ({className}: HeaderProps) => {
 	const anchorRef = useRef<HTMLDivElement>(null)
 	const [isTopOfPage,setIsTopOfPage] = useState(true)
 
-	const {isAuthenticated} = useAuth();
+	const {data: meInfo} = useGetMeInfo()
+
+	console.log('Header Me Info:',meInfo)
 
 	useThemeMode()
 
@@ -38,7 +41,7 @@ const Header = ({className}: HeaderProps) => {
 						</div>
 
 						<div className="hidden flex-1 flex-shrink-0 justify-end text-neutral-700 dark:text-neutral-100 md:flex lg:flex-none">
-							{isAuthenticated && (
+							{meInfo && (
 								<>
 									<div className="hidden gap-x-1 lg:flex">
 										<LangDropdown />
@@ -54,14 +57,14 @@ const Header = ({className}: HeaderProps) => {
 							)}
 
 							{
-								!isAuthenticated && (
+								!meInfo && (
 									<div className="flex items-center gap-x-2">
-										<a
+										<Link
 											href="/login"
 											className="font-(family-name:--font-inter) flex h-9 items-center justify-center rounded-lg bg-primary-600 px-4 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-offset-neutral-900"
 										>
 											Iniciar sesión
-										</a>
+										</Link>
 										<a
 											href="/register"
 											className="font-(family-name:--font-inter) flex h-9 items-center justify-center rounded-lg bg-neutral-200 px-4 text-sm font-medium text-neutral-800 hover:bg-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-900"

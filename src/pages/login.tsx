@@ -1,66 +1,59 @@
-import {useState} from "react";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
 import Link from "next/link";
+import {useRouter} from "next/router";
 
+import {loginSchema,LoginSchema} from "@/schemas/loginSchema";
+import {useLoginMutation} from "@/data/user";
 import {ButtonPrimary,Input,Logo} from "@/components/atoms";
 import {Field,Label} from "@/components/atoms/Fieldset";
-import {LoginInput} from "@/types";
-import {useLoginMutation} from "@/data/user";
+
+import {showError} from "@/utils/toasts";
 
 const Login = () => {
-	const [formData,setFormData] = useState<LoginInput>({
-		email: "",
-		password: "",
+	// Navigation home page 
+	const router = useRouter();
+	const {
+		register,
+		handleSubmit,
+		formState: {errors},
+	} = useForm<LoginSchema>({
+		resolver: zodResolver(loginSchema),
+		mode: "onBlur",
 	});
 
-	const [formErrors,setFormErrors] = useState<Record<string,string>>({});
 	const loginMutation = useLoginMutation();
 
-
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData((prev) => ({
-			...prev,
-			[e.target.name]: e.target.value,
-		}));
-	};
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		console.log("handleSubmit",formData);
-		e.preventDefault();
-		setFormErrors({});
-
-		loginMutation.mutate(formData,{
-			onError: (errors: any) => {
-				console.log("Login error:",errors);
-
-				if (errors && typeof errors === "object") {
-					setFormErrors(errors);
-				}
-			},
-		});
+	const onSubmit = (data: LoginSchema) => {
+		console.log("Errors during login:",errors);
+		try {
+			loginMutation.mutateAsync(data);
+			// fetch query me
+			router.push("/");
+		}
+		catch {
+			showError("Error al iniciar sesión. Por favor, verifica tus credenciales.");
+		}
 	};
 
 	return (
 		<div className="min-h-screen flex flex-col items-center justify-center px-4">
-			{/* Center logo */}
 			<div className="mb-8 flex items-center justify-center">
 				<Logo />
 			</div>
+
 			<div className="w-full max-w-md space-y-8">
-				<form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+				<form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit(onSubmit)}>
 					<Field className="block">
-						<Label className="text-neutral-800 dark:text-neutral-200">
-							Correo electrónico
-						</Label>
+						<Label className="text-neutral-800 dark:text-neutral-200">Correo electrónico</Label>
 						<Input
 							type="email"
-							name="email"
 							placeholder="example@example.com"
-							className="mt-1"
-							value={formData.email}
-							onChange={handleChange}
-						// error={formErrors.email ?? ''}
+							{...register("email")}
+							error={errors.email?.message}
 						/>
 					</Field>
+
 					<Field className="block">
 						<div className="flex items-center justify-between text-neutral-800 dark:text-neutral-200">
 							<Label>Contraseña</Label>
@@ -70,11 +63,8 @@ const Login = () => {
 						</div>
 						<Input
 							type="password"
-							name="password"
-							className="mt-1"
-							value={formData.password}
-							onChange={handleChange}
-						// error={formErrors.password}
+							{...register("password")}
+							error={errors.password?.message}
 						/>
 					</Field>
 
@@ -83,12 +73,17 @@ const Login = () => {
 					</ButtonPrimary>
 				</form>
 
+				{loginMutation.isError && (
+					<p className="text-sm text-red-500 text-center mt-2">
+						Error al iniciar sesión. Verifica tus credenciales.
+					</p>
+				)}
+
 				<div className="block text-center text-sm text-neutral-700 dark:text-neutral-300">
-					¿No tienes una cuenta?
-					{' '}
-					<Link href="/signup" className="font-medium underline">
+					¿No tienes una cuenta?{" "}
+					<a href="/signup" className="font-medium underline">
 						Crea una cuenta
-					</Link>
+					</a>
 				</div>
 			</div>
 		</div>
