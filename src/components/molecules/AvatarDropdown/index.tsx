@@ -9,21 +9,23 @@ import {
 import Link from 'next/link'
 
 import {Avatar} from '@/components/atoms'
-import {SwitchDarkMode} from '@/components/molecules'
 import {
 	HelpSquareIcon,
-	Idea01Icon,
 	Logout03Icon,
 	Task01Icon,
 	UserSharingIcon,
 } from '@/components/atoms/Icons'
+import {Routes} from '@/settings/routes'
+import {UserRole} from '@/types'
 
 
 interface Props {
 	className?: string
+	role?: UserRole
 }
 
-export default function AvatarDropdown({className = ''}: Props) {
+export default function AvatarDropdown({className = '',role}: Props) {
+
 	return (
 		<>
 			<Popover className={`relative flex ${className}`}>
@@ -73,6 +75,22 @@ export default function AvatarDropdown({className = ''}: Props) {
 											</div>
 										</Link>
 
+
+										<Link
+											href={role === UserRole.ADMIN ? Routes.adminUsers.list : Routes.home}
+											className="-m-3 flex items-center rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
+											onClick={() => close()}
+										>
+											<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
+												<UserSharingIcon />
+											</div>
+											<div className="ms-4">
+												<p className="text-sm font-medium">
+													Administración
+												</p>
+											</div>
+										</Link>
+
 										{/* ------------------ 2 --------------------- */}
 										<Link
 											href={'#'}
@@ -92,19 +110,22 @@ export default function AvatarDropdown({className = ''}: Props) {
 										<div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
 
 										{/* ------------------ 2 --------------------- */}
-										<div className="-m-3 flex items-center justify-between rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700">
-											<div className="flex items-center">
-												<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
-													<Idea01Icon />
-												</div>
-												<div className="ms-4">
-													<p className="text-sm font-medium">
-														Tema
-													</p>
-												</div>
+										<Link
+											href={'/account'}
+											className="-m-3 flex items-center rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
+											onClick={() => close()}
+										>
+											<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
+												<UserSharingIcon />
 											</div>
-											<SwitchDarkMode />
-										</div>
+											<div className="ms-4">
+												<p className="text-sm font-medium">
+													Mi cuenta
+												</p>
+											</div>
+										</Link>
+
+
 
 										{/* ------------------ 2 --------------------- */}
 										<Link

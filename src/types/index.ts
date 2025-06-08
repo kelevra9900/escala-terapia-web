@@ -1,10 +1,16 @@
+import type {NextPage} from 'next';
+
 export type Question = {
 	id: string;
 	text: string;
 	type: 'MULTIPLE_CHOICE';
 	options: {label: string; value: string | number}[];
 };
-
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type NextPageWithLayout<P = {}> = NextPage<P> & {
+	authorization?: boolean;
+	getLayout?: (page: React.ReactElement) => React.ReactNode;
+};
 export type FormTemplate = {
 	id: string;
 	title: string;
@@ -25,6 +31,7 @@ export type User = {
 	sub: string;
 	name: string;
 	email: string;
+	subscriptionStatus?: SubscriptionStatus;
 	role: UserRole;
 	iat: number;
 	exp: number;
@@ -38,33 +45,47 @@ export type LoginResponseError = {
 
 export type LoginResponse = LoginResponseSuccess | LoginResponseError;
 
-enum UserRole {
+export enum UserRole {
 	ADMIN = 'ADMIN',
 	THERAPIST = 'THERAPIST',
 	CLIENT = 'CLIENT',
 }
 
+export enum SubscriptionStatus {
+	ACTIVE = 'ACTIVE',
+	INACTIVE = 'INACTIVE',
+	CANCELLED = 'CANCELLED',
+	PAST_DUE = 'PAST_DUE',
+}
+
 
 export type UserListItem = {
 	id: string;
+	avatar?: string;
 	name: string;
 	email: string;
-	role: 'ADMIN' | 'THERAPIST' | 'CLIENT';
+	role: UserRole;
 	isActive: boolean;
-	subscriptionStatus: 'ACTIVE' | 'INACTIVE';
-	createdAt: string; // ISO date string
+	subscriptionStatus: SubscriptionStatus;
+	createdAt: string;
+};
+
+export type CreateUserInput = Omit<UserListItem,'id' | 'createdAt' | 'createdAt' | 'isActive'> & {
+	password: string;
+	confirmPassword: string;
 };
 
 export type PaginatedResponse<T> = {
 	data: T[];
-	meta: {
-		totalCount: number;
-		totalPages: number;
-		currentPage: number;
-		pageSize: number;
-	};
+	meta: Meta;
 };
 
+export type Meta = {
+	totalCount: number;
+	totalPages: number;
+	currentPage: number;
+	pageSize: number;
+};
 
 export interface PricingItemInterface {
 	isPopular: boolean

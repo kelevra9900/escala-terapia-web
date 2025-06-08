@@ -22,8 +22,6 @@ const Header = ({className}: HeaderProps) => {
 
 	const {data: meInfo} = useGetMeInfo()
 
-	console.log('Header Me Info:',meInfo)
-
 	useThemeMode()
 
 	useEffect(() => {
@@ -46,11 +44,11 @@ const Header = ({className}: HeaderProps) => {
 									<div className="hidden gap-x-1 lg:flex">
 										<LangDropdown />
 										<NotifyDropdown />
-										<AvatarDropdown />
+										<AvatarDropdown role={meInfo.role} />
 									</div>
 									<div className="flex gap-x-2 lg:hidden">
 										<NotifyDropdown />
-										<AvatarDropdown />
+										<AvatarDropdown role={meInfo.role} />
 										<MenuBar />
 									</div>
 								</>

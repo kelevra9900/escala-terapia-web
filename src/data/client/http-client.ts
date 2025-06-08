@@ -18,19 +18,20 @@ const Axios = axios.create({
 })
 // Change request data/error
 const AUTH_TOKEN_KEY = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY ?? AUTH_CRED
-Axios.interceptors.request.use((config: any) => {
-	const cookies = Cookies.get(AUTH_TOKEN_KEY)
-	let token = ''
+Axios.interceptors.request.use((config) => {
+	const cookies = Cookies.get(AUTH_TOKEN_KEY);
+	let token = '';
 	if (cookies) {
-		token = cookies
+		token = JSON.parse(cookies)['token'];
 	}
-
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-expect-error
 	config.headers = {
 		...config.headers,
 		Authorization: `Bearer ${token}`,
-	}
-	return config
-})
+	};
+	return config;
+});
 
 // Change response data/error here
 Axios.interceptors.response.use(

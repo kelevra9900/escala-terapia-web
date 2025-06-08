@@ -4,3 +4,8 @@ export {default as SectionHero} from "./Hero";
 export {default as SectionHowItWork} from "./SectionHowItWork";
 export {default as LangDropdown} from './LangDropdown'
 export {default as SectionSubscribe} from './Subscribe'
+export {default as Searchbar} from './Searchbar'
+export {default as Scrollbar} from './Scrollbar'
+export {default as SidebarItem} from './SidebarItem'
+export {default as SidebarItemMap} from './SidebarItem/SidebarItemMap'
+export {default as PricingItem} from './Pricing'

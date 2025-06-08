@@ -12,7 +12,7 @@ interface PriceingItemProps {
 const PricingItem: FC<PriceingItemProps> = ({pricing,key}) => {
 	return (
 		<div
-			key={key}
+			key={'pricing-' + key}
 			className={`relative flex h-full flex-col overflow-hidden rounded-3xl border-2 px-6 py-8 ${pricing.isPopular
 				? 'border-primary-500'
 				: 'border-neutral-100 dark:border-neutral-700'

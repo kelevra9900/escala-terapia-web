@@ -1,11 +1,29 @@
-import {BackgroundSection,BgGlassmorphism} from "@/components/atoms";
-import {SectionHero,SectionHowItWork,SectionSubscribe} from "@/components/molecules";
-import PricingItem from "@/components/molecules/Pricing";
+import {GetServerSideProps} from "next";
+
+import {MainLayout} from "@/components/organisms";
+import {SectionHero,SectionHowItWork,SectionSubscribe,PricingItem} from "@/components/molecules";
+import {BackgroundSection,BgGlassmorphism,Seo} from "@/components/atoms";
+
 import {pricings} from "@/types";
+import {getAuthCredentials} from "@/utils/auth";
 
 export default function Home() {
   return (
-    <div className="relative overflow-hidden bg-white dark:bg-neutral-900">
+    <div className="relative overflow-hidden bg-white dark:bg-neutral-900">.
+      <Seo
+        title="Escala Terapia | Plataforma de Terapia Psicológica Profesional en Línea"
+        description="Accede a sesiones de terapia en línea con profesionales certificados. Agenda fácilmente, responde formularios clínicos y lleva el control de tu progreso emocional."
+        url="https://escala-terapia.com"
+        image="https://escala-terapia.com/images/og-image.jpg"
+        keywords={[
+          "terapia en línea",
+          "terapia psicológica",
+          "terapeutas profesionales",
+          "psicología online",
+          "plataforma de salud mental",
+        ]}
+      />
+
       <BgGlassmorphism />
 
       {/* Contenedor principal centrado */}
@@ -41,3 +59,14 @@ export default function Home() {
     </div>
   );
 }
+
+Home.Layout = MainLayout;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const {permissions} = getAuthCredentials(ctx);
+  return {
+    props: {
+      userPermissions: permissions,
+    },
+  };
+};

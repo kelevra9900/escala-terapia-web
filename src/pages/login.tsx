@@ -5,14 +5,15 @@ import {useRouter} from "next/router";
 
 import {loginSchema,LoginSchema} from "@/schemas/loginSchema";
 import {useLoginMutation} from "@/data/user";
-import {ButtonPrimary,Input,Logo} from "@/components/atoms";
+import {ButtonPrimary,Input,Logo,Seo} from "@/components/atoms";
 import {Field,Label} from "@/components/atoms/Fieldset";
 
 import {showError} from "@/utils/toasts";
+import {MainLayout} from "@/components/organisms";
 
 const Login = () => {
-	// Navigation home page 
 	const router = useRouter();
+
 	const {
 		register,
 		handleSubmit,
@@ -24,20 +25,26 @@ const Login = () => {
 
 	const loginMutation = useLoginMutation();
 
-	const onSubmit = (data: LoginSchema) => {
-		console.log("Errors during login:",errors);
+	const onSubmit = async (data: LoginSchema) => {
 		try {
-			loginMutation.mutateAsync(data);
-			// fetch query me
+			await loginMutation.mutateAsync(data);
 			router.push("/");
-		}
-		catch {
-			showError("Error al iniciar sesión. Por favor, verifica tus credenciales.");
+		} catch (error) {
+			console.error(error);
+			showError("Error al iniciar sesión. Verifica tus credenciales.");
 		}
 	};
 
 	return (
 		<div className="min-h-screen flex flex-col items-center justify-center px-4">
+			<Seo
+				title="Iniciar sesión – Escala Terapia"
+				description="Accede a tu cuenta de Escala Terapia para gestionar tus sesiones, formularios y pacientes."
+				url="https://escala-terapia.com/login"
+				image="https://escala-terapia.com/images/login-og.jpg"
+				noIndex
+			/>
+
 			<div className="mb-8 flex items-center justify-center">
 				<Logo />
 			</div>
@@ -57,7 +64,7 @@ const Login = () => {
 					<Field className="block">
 						<div className="flex items-center justify-between text-neutral-800 dark:text-neutral-200">
 							<Label>Contraseña</Label>
-							<Link href="/" className="text-sm font-medium underline">
+							<Link href="/forgot-password" className="text-sm font-medium underline">
 								¿Olvidaste tu contraseña?
 							</Link>
 						</div>
@@ -81,13 +88,15 @@ const Login = () => {
 
 				<div className="block text-center text-sm text-neutral-700 dark:text-neutral-300">
 					¿No tienes una cuenta?{" "}
-					<a href="/signup" className="font-medium underline">
+					<Link href="/signup" className="font-medium underline">
 						Crea una cuenta
-					</a>
+					</Link>
 				</div>
 			</div>
 		</div>
 	);
 };
+
+Login.Layout = MainLayout;
 
 export default Login;

@@ -1,4 +1,14 @@
+import {atom} from 'jotai';
+
+
 export const AUTH_CRED = 'AUTH_CRED'
+export const PERMISSIONS = 'permissions';
+export const ADMIN_ROLE = 'ADMIN';
+export const THERAPIST_ROLE = 'THERAPIST';
+export const ALLOWED_ROLES = [ADMIN_ROLE,THERAPIST_ROLE];
+export const ONLY_ADMIN_ROLE = [ADMIN_ROLE];
+export const DEFAULT_LANGUAGE = 'es';
+export const DEFAULT_CURRENCY = 'MXN';
 
 export const avatarColors = [
 	'#ffdd00',
@@ -28,3 +38,15 @@ export const avatarColors = [
 	'#5E13BD',
 	'#E208A7',
 ]
+
+export const ACCEPTED_FILE_TYPES = {
+	'image/jpeg': [],
+	'image/png': [],
+	'application/pdf': [],
+	'application/zip': [],
+};
+export const RESPONSIVE_WIDTH = 1024 as number;
+
+export const searchModalInitialValues = atom(false);
+export const miniSidebarInitialValue = atom(false);
+export const approveModalInitialValues = atom(false);
