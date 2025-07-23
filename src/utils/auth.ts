@@ -17,17 +17,32 @@ export function getAuthCredentials(context?: any): {
 	permissions: string[] | null;
 	role: string | null;
 } {
-	let authCred;
+	let authCred: string | undefined;
+
 	if (context) {
-		authCred = parseSSRCookie(context)[AUTH_CRED];
-	} else {
+		const cookies = parseSSRCookie(context);
+		authCred = cookies?.[AUTH_CRED];
+	} else if (typeof window !== 'undefined') {
 		authCred = Cookie.get(AUTH_CRED);
 	}
+
 	if (authCred) {
-		return JSON.parse(authCred);
+		try {
+			const parsed = JSON.parse(authCred);
+			return {
+				token: parsed.token ?? null,
+				permissions: parsed.permissions ?? null,
+				role: parsed.role ?? null,
+			};
+		} catch (e) {
+			console.warn('Error parsing auth cookie:',e);
+			return {token: null,permissions: null,role: null};
+		}
 	}
+
 	return {token: null,permissions: null,role: null};
 }
+
 
 export function parseSSRCookie(context: any) {
 	return SSRCookie.parse(context.req.headers.cookie ?? '');
