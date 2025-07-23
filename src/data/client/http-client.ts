@@ -19,30 +19,28 @@ const Axios = axios.create({
 })
 // Change request data/error
 
-Axios.interceptors.request.use((config) => {
-	const cookies = Cookies.get(AUTH_CRED);
-	console.log('Cookies:',cookies);
-	let token = '';
-	if (cookies) {
-		token = JSON.parse(cookies)['token'];
+Axios.interceptors.request.use((config: any) => {
+	if (typeof window !== 'undefined') {
+		const cookies = Cookies.get(AUTH_CRED);
+		let token = '';
+
+		if (cookies) {
+			try {
+				token = JSON.parse(cookies)['token'];
+			} catch (e) {
+				console.warn('Failed to parse cookie',e);
+			}
+		}
+
+		config.headers = {
+			...config.headers,
+			Authorization: `Bearer ${token}`,
+		};
 	}
 
-	console.log('Axios request interceptor:',{
-		url: config.url,
-		method: config.method,
-		headers: config.headers,
-		data: config.data,
-		token,
-	});
-
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-expect-error
-	config.headers = {
-		...config.headers,
-		Authorization: `Bearer ${token}`,
-	};
 	return config;
 });
+
 
 // Change response data/error here
 Axios.interceptors.response.use(

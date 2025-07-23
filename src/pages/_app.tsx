@@ -9,13 +9,16 @@ import {
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {Toaster} from 'react-hot-toast';
 
-import {AuthProvider} from "@/context/AuthContext";
+const AuthProvider = dynamic(() => import('@/context/AuthContext').then(mod => mod.AuthProvider),{
+  ssr: false,
+});
 import {UIProvider} from "@/context/UIContext";
 import {ModalProvider} from "@/context/ModalContext";
 import {NextPageWithLayout} from "@/types";
 import ManagedModal from "@/components/organisms/Modal/managed-modal";
 import PrivateRoute from "@/utils/privateRoute";
 import defaultSeo from '@/settings/seo.settings';
+import dynamic from "next/dynamic";
 
 
 type AppPropsWithLayout = AppProps & {
