@@ -33,7 +33,6 @@ export default function Home() {
 
       <BgGlassmorphism />
 
-      {/* Contenedor principal centrado */}
       <div className="container mx-auto px-4 mb-24 space-y-24 lg:mb-28 lg:space-y-28">
         <SectionHero />
         <SectionHowItWork />
