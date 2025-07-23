@@ -1,0 +1,11 @@
+{
+  "semi": false,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "tabWidth": 2,
+  "useTabs": false,
+  "importOrderTypeScriptVersion": "5.0.0",
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports"
+  ]
+}
