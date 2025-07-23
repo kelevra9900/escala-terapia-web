@@ -1,14 +1,110 @@
-import AppLayout from "@/components/organisms/Layout/AppLayout";
+import {useState,useEffect} from 'react';
+import {useRouter} from 'next/router';
+import {GetServerSideProps} from 'next';
 
+import {Card,LinkButton,PageHeading,Seo} from '@/components/atoms';
+import AppLayout from '@/components/organisms/Layout/AppLayout';
+// import {useModalAction} from '@/context/ModalContext';
+import Search from '@/components/molecules/Searchbar';
+import Loader from '@/components/atoms/Loader';
+import {PlusIcon} from '@heroicons/react/24/solid';
+import {getAuthCredentials} from '@/utils/auth';
+import {Routes} from '@/settings/routes';
+import {usePaginatedFormTemplates} from '@/data/forms';
+import {FormTemplateTable} from '@/components/organisms';
+import {Meta} from '@/types';
 
-export default function Forms() {
+export default function AdminFormTemplates() {
+	// const {openModal} = useModalAction();
+	const router = useRouter();
+
+	const [page,setPage] = useState(1);
+	const [search,setSearch] = useState('');
+	const [debouncedSearch,setDebouncedSearch] = useState(search);
+
+	const {data,isLoading} = usePaginatedFormTemplates({
+		page,
+		limit: 10,
+		search: debouncedSearch,
+	});
+
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setDebouncedSearch(search);
+			setPage(1);
+		},500);
+		return () => clearTimeout(timeout);
+	},[search]);
+
+	const handleOpenFormTemplateDelete = (id: string) => {
+		console.log('Open delete modal for form template with ID:',id);
+		// openModal('DELETE_FORM_TEMPLATE',id);
+	};
+
+	const handleOpenFormTemplateEdit = (id: string) => {
+		router.push(Routes.adminForms.edit(id));
+	};
+
+	function handleSearch({searchText}: {searchText: string}) {
+		setSearch(searchText);
+		setPage(1);
+	}
+
 	return (
-		<div className="flex flex-col items-center justify-center h-screen">
-			<h1 className="text-2xl font-bold mb-4">Forms</h1>
-			<p className="text-gray-600">This page is under construction.</p>
-		</div>
+		<>
+			<Seo
+				title="Formularios Clínicos – Administración"
+				description="Administra formularios clínicos utilizados por terapeutas."
+				url="https://escala-terapia.com/dashboard"
+				noIndex
+			/>
+
+			<Card className="mb-8 flex flex-col items-center md:flex-row bg-white dark:bg-dark-1000">
+				<div className="mb-4 md:mb-0 md:w-1/4">
+					<PageHeading title={'Formularios Clínicos'} />
+				</div>
+
+				<div className="flex w-full flex-col items-center space-y-4 space-x-4 ms-auto md:w-3/4 md:flex-row md:space-y-0 xl:w-2/4">
+					<Search
+						onSearch={handleSearch}
+						placeholderText={'Buscar por nombre o descripción'}
+						variant="outline"
+						className="w-full"
+					/>
+					<LinkButton
+						href={`${Routes.adminForms.create}`}
+						variant="outline"
+						className="w-full md:w-auto"
+					>
+						<PlusIcon className="me-2 h-5 w-5" />
+						<span>Crear</span>
+					</LinkButton>
+				</div>
+			</Card>
+
+			{isLoading ? (
+				<Loader />
+			) : (
+				<FormTemplateTable
+					formTemplates={data?.data || []}
+					meta={data?.meta || ({} as Meta)}
+					isLoading={isLoading}
+					onEdit={handleOpenFormTemplateEdit}
+					onDelete={handleOpenFormTemplateDelete}
+					onPagination={(page) => setPage(page)}
+				/>
+			)}
+		</>
 	);
 }
 
+AdminFormTemplates.Layout = AppLayout;
 
-Forms.Layout = AppLayout;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+	const {permissions} = getAuthCredentials(ctx);
+	return {
+		props: {
+			userPermissions: permissions,
+		},
+	};
+};

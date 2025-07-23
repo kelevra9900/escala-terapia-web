@@ -1,9 +1,9 @@
 import React,{FC} from 'react'
 import Image,{StaticImageData} from 'next/image'
 
-import HIW1img from '@/assets/images/HIW1.png'
-import HIW2img from '@/assets/images/HIW2.png'
-import HIW3img from '@/assets/images/HIW3.png'
+import HIW1img from '@/assets/images/1-1.png'
+import HIW2img from '@/assets/images/2-2.png'
+import HIW3img from '@/assets/images/3-3.png'
 import VectorImg from '@/assets/svg/VectorHIW.svg'
 
 export interface SectionHowItWorkProps {

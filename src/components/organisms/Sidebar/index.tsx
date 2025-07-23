@@ -5,7 +5,7 @@ import {siteSettings} from "@/settings/site.settings";
 type MenuItemsProps = Record<string,any>;
 
 const SideBarGroup = () => {
-	const menuItems: MenuItemsProps = siteSettings?.sidebarLinks?.admin;
+	const menuItems: MenuItemsProps = siteSettings?.sidebarLinks?.admin.therapist;
 	const menuKeys = Object.keys(menuItems);
 
 	return (

@@ -9,25 +9,43 @@ export const Routes = {
 	users: {
 		...routesFactory('/users'),
 	},
-	adminSubscriptions: '/admin/subscriptions',
-	adminForms: '/admin/forms',
-	therapistForms: '/therapist/forms',
+	adminSubscriptions: {
+		...routesFactory('/admin/subscriptions'),
+	},
+	adminForms: {
+		...routesFactory('/admin/forms'),
+	},
 	adminSettings: '/admin/settings',
 	adminReports: {
 		...routesFactory('/admin/reports'),
 	},
 	adminUsers: {
-		...routesFactory('/admin/users'),
+		...routesFactory('/admin'),
 		action: (id: string,action: string) => `/admin/users/${id}/${action}`,
 	},
 	adminTherapists: {
 		...routesFactory('/admin/therapists'),
 	},
 	therapistClients: {
-		...routesFactory('/therapist/clients'),
+		list: '/therapist/clients',
+		create: '/therapist/clients/create',
+		edit: (id: string) => `/therapist/clients/${id}/edit`,
+		details: (id: string) => `/therapist/clients/${id}`,
 	},
 	therapistAppointments: {
-		...routesFactory('/therapist/appointments'),
+		list: '/therapist/appointments',
+		create: '/therapist/appointments/create',
+		edit: (id: string) => `/therapist/appointments/${id}/edit`,
+	},
+	therapistReports: {
+		list: '/therapist/reports',
+		details: (id: string) => `/therapist/reports/${id}`,
+	},
+
+	therapistForms: {
+		list: '/therapist/forms',
+		assign: '/therapist/forms/assign',
+		responses: (invitationId: string) => `/therapist/forms/responses/${invitationId}`,
 	},
 	therapistMessages: '/therapist/messages',
 	therapistProfile: '/therapist/profile',

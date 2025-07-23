@@ -1,40 +1,169 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# 🧠 Flujo del Terapeuta: Envío y Revisión de Formularios Clínicos
 
-## Getting Started
+Este documento describe el proceso completo que un terapeuta sigue dentro del sistema para asignar formularios clínicos a sus pacientes, revisar sus respuestas y obtener posibles reportes.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚪 1. Inicio de Sesión
+
+El terapeuta accede a la plataforma a través del panel de autenticación y se le otorgan permisos específicos de acuerdo a su `role: THERAPIST`.
+
+---
+
+## 👥 2. Gestión de Pacientes
+
+Ruta: `/therapist/clients`
+
+- Visualiza una lista paginada de sus pacientes.
+- Puede buscar por nombre o correo electrónico.
+- Tiene la opción de **crear un nuevo paciente** si aún no existe en el sistema.
+
+---
+
+## 📋 3. Visualización de Formularios Disponibles
+
+Ruta: `/therapist/forms`
+
+- Se despliegan todos los formularios clínicos disponibles.
+- Cada formulario contiene:
+  - `title`
+  - `description`
+  - lista de `questions`
+
+---
+
+## 📨 4. Envío de Formulario al Paciente
+
+Desde la vista del paciente o del catálogo de formularios, el terapeuta puede asignar un formulario.
+
+**Flujo técnico:**
+
+```http
+POST /form-invitations
+Payload:
+
+json
+Copiar
+Editar
+{
+  "clientId": "UUID del paciente",
+  "formTemplateId": "UUID del formulario"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El sistema genera una FormInvitation con:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Un token único.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Fecha de creación y expiración.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+Estado isCompleted: false.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📩 5. Notificación al Paciente
 
-## Learn More
+Se puede enviar automáticamente un email con el enlace único:
 
-To learn more about Next.js, take a look at the following resources:
+```plaintext
+https://midominio.com/form/response?token=UNIQUE_TOKEN
+El paciente accede sin necesidad de iniciar sesión.
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+## ✍️ 6. Llenado del Formulario
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+El paciente responde cada pregunta.
 
-## Deploy on Vercel
+Al finalizar, se envía el formulario.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Lógica en backend:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+Se marca la invitación como completada.
+
+Se crea un FormResponse y sus respectivas Answer.
+
+## ✅ 7. Revisión por Parte del Terapeuta
+
+Ruta: /therapist/forms/responses o desde /therapist/clients/[id]
+
+El terapeuta ve una tabla con los formularios respondidos.
+
+Puede filtrar por:
+
+Nombre del paciente
+
+Título del formulario
+
+Fecha de llenado
+
+Nivel (ej. ansiedad)
+
+Al seleccionar una respuesta, accede a:
+
+```http
+/therapist/forms/responses/[responseId]
+```
+
+### Vista incluye
+
+Pregunta y respuesta
+
+Fecha de llenado
+
+Puntaje total (si aplica)
+
+Nivel clínico (ej. MODERATE, SEVERE)
+
+📄 8. Reportes Automatizados (Opcional)
+Si el formulario está diseñado para análisis automático, se genera un Report asociado al FormResponse.
+
+### Ejemplo de Reporte
+
+```json
+{
+  "formResponseId": "UUID del FormResponse",
+  "summary": "Paciente presenta indicios de ansiedad moderada.",
+  "score": 3,
+  "level": "MODERATE"
+}
+```
+
+---
+
+## 🔐 Seguridad y Permisos
+
+Los terapeutas sólo pueden acceder a pacientes y formularios que ellos mismos han creado o asignado.
+
+Los enlaces enviados a los pacientes usan tokens únicos y válidos por única vez.
+
+El FormInvitation es la clave que vincula therapist, client, y formTemplate.
+
+## 📦 Entidades involucradas
+
+User (role = THERAPIST)
+
+Client
+
+FormTemplate
+
+FormInvitation
+
+FormResponse
+
+Answer
+
+Report (opcional)
+
+## 🛠️ Consideraciones Técnicas
+
+El sistema usa Prisma para gestionar relaciones.
+
+Todas las operaciones están documentadas en Swagger.
+
+El frontend está desarrollado en Next.js con arquitectura basada en Atomic Design.
+
+## 📌 Próximos pasos
+
+ Notificaciones automáticas vía correo o WhatsApp.
+
+ Exportación de reportes en PDF.
+
+ Visualización gráfica de resultados históricos del paciente.

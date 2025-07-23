@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import invariant from 'tiny-invariant'
@@ -17,13 +18,23 @@ const Axios = axios.create({
 	},
 })
 // Change request data/error
-const AUTH_TOKEN_KEY = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY ?? AUTH_CRED
+
 Axios.interceptors.request.use((config) => {
-	const cookies = Cookies.get(AUTH_TOKEN_KEY);
+	const cookies = Cookies.get(AUTH_CRED);
+	console.log('Cookies:',cookies);
 	let token = '';
 	if (cookies) {
 		token = JSON.parse(cookies)['token'];
 	}
+
+	console.log('Axios request interceptor:',{
+		url: config.url,
+		method: config.method,
+		headers: config.headers,
+		data: config.data,
+		token,
+	});
+
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-expect-error
 	config.headers = {
@@ -42,7 +53,7 @@ Axios.interceptors.response.use(
 			(error.response && error.response.status === 403) ||
 			(error.response && error.response.data.message === 'Unauthorized')
 		) {
-			Cookies.remove(AUTH_TOKEN_KEY)
+			Cookies.remove(AUTH_CRED)
 		}
 		return Promise.reject(error)
 	}

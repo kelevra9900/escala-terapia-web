@@ -6,7 +6,9 @@ export {default as Footer} from './Footer';
 export {default as NavMobile} from './Navigation/NavMobile';
 export {default as MenuMobile} from './MenuMobile';
 export {default as UserTable} from './UserTable';
-
+export {default as FormTemplateTable} from './FormTemplateTable';
+export {default as ClientTable} from './ClientTable';
+export {default as FormTable} from './FormTable';
 // Layouts
 export {default as AuthLayout} from './Layout/AuthLayout';
 export {default as DashboardLayout} from './Layout/AppLayout';

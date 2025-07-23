@@ -2,10 +2,10 @@ import {Avatar,Badge} from "@/components/atoms";
 import {EditIcon} from "@/components/atoms/Icons/edit";
 import {AlignType,Table} from "@/components/atoms/Table";
 import Pagination from "@/components/molecules/Pagination";
-import {Meta,UserListItem} from "@/types";
+import {Meta,SubscriptionStatus,UserListItem} from "@/types";
 import {getRole,simplifyUUID,formatSubscriptionStatus} from "@/utils";
 import {formatDate} from "@/utils/manage-dates";
-import {TrashIcon} from "@heroicons/react/24/solid";
+import {TrashIcon} from '@/components/atoms/Icons/trash';
 
 type Props = {
 	users: UserListItem[];
@@ -82,7 +82,7 @@ const UserTable = ({
 		render: (text: string) => (
 			<Badge
 				color={text === 'ACTIVE' ? 'bg-lime-100 !text-lime-500' : 'bg-red-100 text-red-500'}
-				text={formatSubscriptionStatus(text)}
+				text={formatSubscriptionStatus(text as SubscriptionStatus)}
 			/>
 		),
 	},{

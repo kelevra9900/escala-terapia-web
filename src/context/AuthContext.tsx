@@ -11,6 +11,8 @@ interface AuthContextType {
 	isAuthenticated: boolean;
 	login: (data: LoginResponseSuccess) => void;
 	logout: () => void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	token: any | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,6 +35,17 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 		window.location.href = '/login'
 	};
 
+	const getToken = () => {
+		const raw = Cookies.get(AUTH_CRED);
+		if (!raw) return null;
+		try {
+			const parsed = JSON.parse(raw);
+			return parsed.token;
+		} catch {
+			return null;
+		}
+	};
+
 	return (
 		<AuthContext.Provider
 			value={{
@@ -40,6 +53,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 				isAuthenticated: !!user && isSuccess,
 				login,
 				logout,
+				token: getToken(),
 			}}
 		>
 			{children}

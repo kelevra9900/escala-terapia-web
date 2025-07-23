@@ -14,7 +14,7 @@ export const getRole = (role: string): string => {
 }
 
 // Simplicate function to shorten UUID strings
-export const simplifyUUID = (id: number): string => {
+export const simplifyUUID = (id: number | string): string => {
 	if (!isValidUUID(id.toString())) {
 		throw new Error('Invalid UUID format');
 	}

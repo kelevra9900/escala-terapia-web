@@ -52,12 +52,12 @@ export const siteSettings = {
 						icon: 'UsersIcon',
 					},
 					{
-						href: Routes.adminSubscriptions,
+						href: Routes.adminSubscriptions.list,
 						label: 'Suscripciones',
 						icon: 'MyShopIcon',
 					},
 					{
-						href: Routes.adminForms,
+						href: Routes.adminForms.list,
 						label: 'Formularios',
 						icon: 'AttributeIcon',
 					},

@@ -1,5 +1,7 @@
+import {Scrollbar} from "@/components/molecules";
 import Footer from "../Footer";
 import Header from "../Header";
+import SideBarGroup from "../Sidebar";
 
 
 const TherapistLayout: React.FC<{children?: React.ReactNode}> = ({
@@ -11,7 +13,16 @@ const TherapistLayout: React.FC<{children?: React.ReactNode}> = ({
 			<div className="flex flex-1">
 				<aside className='fixed bottom-0 z-10 hidden h-full w-72 bg-white shadow transition-[width] duration-300 ltr:left-0 ltr:right-auto rtl:right-0 rtl:left-auto lg:block pt-20'>
 					<div className="w-full h-full overflow-x-hidden sidebar-scrollbar">
-
+						<Scrollbar
+							className="h-full w-full"
+							options={{
+								scrollbars: {
+									autoHide: 'never',
+								},
+							}}
+						>
+							<SideBarGroup />
+						</Scrollbar>
 					</div>
 				</aside>
 

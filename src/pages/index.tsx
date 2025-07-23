@@ -6,8 +6,15 @@ import {BackgroundSection,BgGlassmorphism,Seo} from "@/components/atoms";
 
 import {pricings} from "@/types";
 import {getAuthCredentials} from "@/utils/auth";
+import {useStartSubscription} from "@/hooks/useStartSubscription";
 
 export default function Home() {
+  const {mutate: startSubscription} = useStartSubscription();
+
+  const handleSubscribeClick = () => {
+    startSubscription();
+  }
+
   return (
     <div className="relative overflow-hidden bg-white dark:bg-neutral-900">.
       <Seo
@@ -44,7 +51,7 @@ export default function Home() {
           <section className="overflow-hidden text-sm text-neutral-600 md:text-base">
             <div className="grid gap-5 lg:grid-cols-3 xl:gap-8">
               {pricings.map((pricing,index) => (
-                <PricingItem key={index} pricing={pricing} />
+                <PricingItem key={index} pricing={pricing} onClick={handleSubscribeClick} />
               ))}
             </div>
           </section>

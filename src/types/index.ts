@@ -11,12 +11,53 @@ export type NextPageWithLayout<P = {}> = NextPage<P> & {
 	authorization?: boolean;
 	getLayout?: (page: React.ReactElement) => React.ReactNode;
 };
-export type FormTemplate = {
+
+export type QuestionType = 'SHORT_ANSWER' | 'PARAGRAPH' | 'MULTIPLE_CHOICE' | 'CHECKBOXES' | 'DROPDOWN';
+
+export interface FormQuestion {
+	id: string;
+	text: string;
+	type: QuestionType;
+	options: string[];
+	order: number;
+}
+
+
+export interface FormTemplateQuestion {
+	id: string;
+	text: string;
+	type: QuestionType;
+	options: string[];
+	order: number;
+}
+
+export interface CreateFormTemplateInput {
+	title: string;
+	description: string;
+	isActive: boolean;
+}
+
+export interface FormTemplate {
 	id: string;
 	title: string;
 	description: string;
-	questions: Question[];
+	isActive: boolean;
+	createdBy: string;
+	createdAt: string;
+	questions: FormTemplateQuestion[];
+}
+export type SubmitFormResponseInput = {
+	token: string;
+	answers: Record<string,string>;
 };
+
+export interface Form {
+	id: string;
+	isCompleted: boolean;
+	token: string;
+	formTemplate: FormTemplate | null;
+}
+
 
 export type LoginInput = {
 	email: string;
@@ -58,6 +99,44 @@ export enum SubscriptionStatus {
 	PAST_DUE = 'PAST_DUE',
 }
 
+export type Client = {
+	id: string;
+	therapistId: string;
+	name: string;
+	email: string;
+	birthdate?: string | null;
+	gender?: string;
+	createdAt: string
+	notes?: string | null;
+}
+
+export type CreateClientInput = Omit<Client,'id' | 'createdAt'> & {
+	name: string;
+	email: string;
+	birthdate?: string | null;
+	gender?: string;
+	notes?: string | null;
+};
+
+export type Reponse = {
+	id: string;
+	filledAt: string;
+	clientName: string;
+	clientEmail: string;
+	formTemplateTitle: string;
+	score?: number | null;
+	level?: AnxietyLevel | null;
+}
+
+export type FormResponses = {
+	id: string;
+	filledAt: string;
+	clientId: string;
+	clientName: string;
+	clientEmail: string;
+	formTemplateTitle: string;
+	responses: FormResponseAnswer[];
+}
 
 export type UserListItem = {
 	id: string;
@@ -138,3 +217,36 @@ export const pricings: PricingItemInterface[] = [
 		desc: 'Diseñado para clínicas o terapeutas con alto volumen de pacientes y seguimiento detallado.',
 	},
 ];
+
+
+// Forms
+export type AnxietyLevel = 'MINIMAL' | 'MILD' | 'MODERATE' | 'SEVERE';
+
+export type FormResponseAnswer = {
+	questionId: string;
+	questionText: string;
+	type: QuestionType;
+	answer: string;
+};
+
+export type FormTemplateSummary = {
+	id: string;
+	title: string;
+	description: string;
+};
+
+export type ClientSummary = {
+	id: string;
+	name: string;
+	email: string;
+};
+
+export type FormInvitationWithResponses = {
+	id: string;
+	filledAt: string; // o `Date`, si luego lo transformas
+	client: ClientSummary;
+	formTemplate: FormTemplateSummary;
+	responses: FormResponseAnswer[];
+	score?: number | null;
+	level?: AnxietyLevel | null;
+};
