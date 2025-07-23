@@ -25,13 +25,13 @@ const SectionSubscribe: FC<SectionSubscribe2Props> = ({className = ''}) => {
 				</span>
 				<ul className="mt-10 space-y-4">
 					<li className="flex items-center gap-x-4">
-						<Badge name="01" />
+						<Badge text="01" />
 						<span className="font-medium text-neutral-700 dark:text-neutral-300 font-(family-name:--font-inter)">
 							Accede a formularios clínicos exclusivos
 						</span>
 					</li>
 					<li className="flex items-center gap-x-4">
-						<Badge color="red" name="02" />
+						<Badge color="red" text="02" />
 						<span className="font-medium text-neutral-700 dark:text-neutral-300 font-(family-name:--font-inter)">
 							Aprende a interpretar resultados con reportes automáticos
 						</span>

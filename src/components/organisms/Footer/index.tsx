@@ -1,4 +1,5 @@
 import {Logo} from "@/components/atoms";
+import {JSX} from "react";
 
 const navigation: {
 	solutions: {name: string; href: string}[]
