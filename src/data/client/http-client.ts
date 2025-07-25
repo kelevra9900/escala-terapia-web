@@ -26,15 +26,17 @@ Axios.interceptors.request.use((config: any) => {
 
 		if (cookies) {
 			try {
-				token = JSON.parse(cookies)['token'];
+				const decoded = decodeURIComponent(cookies);
+				const parsed = JSON.parse(decoded);
+				token = parsed?.token ?? '';
 			} catch (e) {
-				console.warn('Failed to parse cookie',e);
+				console.warn('Failed to parse AUTH_CRED cookie:',cookies,e);
 			}
 		}
 
 		config.headers = {
 			...config.headers,
-			Authorization: `Bearer ${token}`,
+			Authorization: token ? `Bearer ${token}` : '',
 		};
 	}
 

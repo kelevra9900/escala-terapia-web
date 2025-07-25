@@ -12,17 +12,15 @@ export function setAuthCredentials(token: string,permissions: any,role: any) {
 	Cookie.set(AUTH_CRED,JSON.stringify({token,permissions,role}));
 }
 
-export function getAuthCredentials(context?: any): {
-	token: string | null;
-	permissions: string[] | null;
-	role: string | null;
-} {
+export function getAuthCredentials(context?: any) {
 	let authCred: string | undefined;
 
 	if (context) {
+		console.log('[getAuthCredentials] SSR mode, context.req:',!!context.req);
 		const cookies = parseSSRCookie(context);
 		authCred = cookies?.[AUTH_CRED];
 	} else if (typeof window !== 'undefined') {
+		console.log('[getAuthCredentials] CSR mode');
 		authCred = Cookie.get(AUTH_CRED);
 	}
 
@@ -36,7 +34,6 @@ export function getAuthCredentials(context?: any): {
 			};
 		} catch (e) {
 			console.warn('Error parsing auth cookie:',e);
-			return {token: null,permissions: null,role: null};
 		}
 	}
 
@@ -44,9 +41,22 @@ export function getAuthCredentials(context?: any): {
 }
 
 
+
 export function parseSSRCookie(context: any) {
-	return SSRCookie.parse(context.req.headers.cookie ?? '');
+	try {
+		const cookieHeader = context?.req?.headers?.cookie;
+		if (!cookieHeader) {
+			console.warn('[parseSSRCookie] No cookie header found.');
+			return {};
+		}
+		return SSRCookie.parse(cookieHeader);
+	} catch (error) {
+		console.error('[parseSSRCookie] Failed to parse cookies:',error);
+		return {};
+	}
 }
+
+
 
 export function hasAccess(
 	_allowedRoles: string[],

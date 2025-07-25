@@ -69,7 +69,7 @@ export default function Home() {
 Home.Layout = MainLayout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const {permissions} = getAuthCredentials(ctx);
+  const {permissions} = getAuthCredentials(ctx)
   return {
     props: {
       userPermissions: permissions,

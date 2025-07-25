@@ -18,15 +18,8 @@ interface HeaderProps {
 
 const Header = ({className}: HeaderProps) => {
 	const anchorRef = useRef<HTMLDivElement>(null)
-	const [isTopOfPage,setIsTopOfPage] = useState(true)
-
 	const {data: meInfo} = useGetMeInfo()
-
-	useThemeMode()
-
-	useEffect(() => {
-		setIsTopOfPage(window.pageYOffset < 5)
-	},[])
+	// useThemeMode()
 
 	return (
 		<>
