@@ -154,6 +154,12 @@ export type CreateUserInput = Omit<UserListItem,'id' | 'createdAt' | 'createdAt'
 	confirmPassword: string;
 };
 
+export type RegisterInput = {
+	name: string;
+	email: string;
+	password: string;
+};
+
 export type PaginatedResponse<T> = {
 	data: T[];
 	meta: Meta;

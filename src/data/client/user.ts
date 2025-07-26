@@ -6,7 +6,8 @@ import type {
 	LoginResponseSuccess,
 	PaginatedResponse,
 	User,
-	UserListItem
+	UserListItem,
+	RegisterInput
 } from "@/types"
 
 
@@ -30,5 +31,8 @@ export const userClient = {
 	},
 	createUser: (data: CreateUserInput): Promise<UserListItem> => {
 		return HttpClient.post<UserListItem>('/users',data)
-	}
+	},
+	register: (data: RegisterInput) => {
+		return HttpClient.post("/auth/register",data);
+	},
 }

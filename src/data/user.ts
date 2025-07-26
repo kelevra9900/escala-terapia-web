@@ -1,7 +1,7 @@
 import {useMutation,useQuery,useQueryClient} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
-import {User,LoginInput,LoginResponseSuccess,PaginatedResponse,UserListItem,CreateUserInput} from '@/types';
+import {User,LoginInput,LoginResponseSuccess,PaginatedResponse,UserListItem,CreateUserInput,RegisterInput} from '@/types';
 import {userClient} from './client/user';
 import {getFormErrors} from './client/http-client';
 import {useAuth} from '@/context/AuthContext';
@@ -24,6 +24,12 @@ export const useLoginMutation = () => {
 			showError('Error al iniciar sesión');
 			return formErrors;
 		},
+	});
+};
+
+export const useRegisterMutation = () => {
+	return useMutation({
+		mutationFn: (data: RegisterInput) => userClient.register(data),
 	});
 };
 

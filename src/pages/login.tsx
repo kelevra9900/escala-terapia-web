@@ -23,12 +23,18 @@ const Login = () => {
 		mode: "onBlur",
 	});
 
-	const loginMutation = useLoginMutation();
+	const {mutate: loginMutation,isPending,isError} = useLoginMutation();
 
 	const onSubmit = async (data: LoginSchema) => {
 		try {
-			await loginMutation.mutateAsync(data);
-			router.push("/");
+			loginMutation(data,{
+				onSuccess: () => {
+					router.push("/");
+				},
+				onError: (error) => {
+					console.log("Error on login",error)
+				}
+			});
 		} catch (error) {
 			console.error(error);
 			showError("Error al iniciar sesión. Verifica tus credenciales.");
@@ -75,12 +81,12 @@ const Login = () => {
 						/>
 					</Field>
 
-					<ButtonPrimary type="submit" disabled={loginMutation.isPending}>
-						{loginMutation.isPending ? "Cargando..." : "Login"}
+					<ButtonPrimary type="submit" disabled={isPending}>
+						{isPending ? "Cargando..." : "Login"}
 					</ButtonPrimary>
 				</form>
 
-				{loginMutation.isError && (
+				{isError && (
 					<p className="text-sm text-red-500 text-center mt-2">
 						Error al iniciar sesión. Verifica tus credenciales.
 					</p>
