@@ -33,6 +33,12 @@ export const useRegisterMutation = () => {
 	});
 };
 
+export const useForgotPasswordMutation = () => {
+	return useMutation({
+		mutationFn: (email: string) => userClient.forgotPassword(email),
+	});
+};
+
 export const useDeleteUserMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation<{message: string},AxiosError,{id: string}>({

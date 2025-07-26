@@ -57,7 +57,7 @@ const Header = ({className}: HeaderProps) => {
 											Iniciar sesión
 										</Link>
 										<a
-											href="/register"
+											href="/signup"
 											className="font-(family-name:--font-inter) flex h-9 items-center justify-center rounded-lg bg-neutral-200 px-4 text-sm font-medium text-neutral-800 hover:bg-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-900"
 										>
 											Registrarse

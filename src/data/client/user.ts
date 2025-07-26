@@ -35,4 +35,6 @@ export const userClient = {
 	register: (data: RegisterInput) => {
 		return HttpClient.post("/auth/register",data);
 	},
+	forgotPassword: (email: string) =>
+		HttpClient.post("/auth/forgot-password",{email}),
 }
