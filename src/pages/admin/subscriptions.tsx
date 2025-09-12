@@ -1,6 +1,8 @@
 import AppLayout from "@/components/organisms/Layout/AppLayout";
-import {getAuthCredentials} from "@/utils/auth";
+import {getAuthCredentials,hasAccess} from "@/utils/auth";
 import {GetServerSideProps} from "next";
+import {Routes} from "@/settings/routes";
+import {ONLY_ADMIN_ROLE} from "@/utils/constants";
 
 export default function Subscriptions() {
 	return (
@@ -15,10 +17,9 @@ export default function Subscriptions() {
 Subscriptions.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const {permissions} = getAuthCredentials(ctx);
-	return {
-		props: {
-			userPermissions: permissions,
-		},
-	};
+	const {token,permissions} = getAuthCredentials(ctx);
+	if (!token || !hasAccess(ONLY_ADMIN_ROLE,permissions)) {
+		return {redirect: {destination: Routes.login,permanent: false}};
+	}
+	return {props: {userPermissions: permissions}};
 };

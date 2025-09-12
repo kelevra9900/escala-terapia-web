@@ -19,6 +19,8 @@ import ManagedModal from "@/components/organisms/Modal/managed-modal";
 import PrivateRoute from "@/utils/privateRoute";
 import defaultSeo from '@/settings/seo.settings';
 import dynamic from "next/dynamic";
+import {useRouter} from 'next/router';
+import {ALLOWED_ROLES,ONLY_ADMIN_ROLE} from '@/utils/constants';
 
 
 type AppPropsWithLayout = AppProps & {
@@ -32,8 +34,22 @@ const Noop: React.FC<{children?: React.ReactNode}> = ({children}) => (
 
 export default function App({Component,pageProps}: AppPropsWithLayout) {
   const Layout = (Component as any).Layout || Noop;
-  const authProps = (Component as any).authenticate;
+  const componentAuthProps = (Component as any).authenticate;
   const queryClient = new QueryClient()
+  const router = useRouter();
+
+  // Infer authentication requirements by pathname when the page didn't declare them
+  const pathname = router.pathname || '';
+  let inferredAuthProps: { permissions: string[] } | undefined = undefined;
+  if (/^\/admin(\/|$)/.test(pathname)) {
+    inferredAuthProps = { permissions: ONLY_ADMIN_ROLE };
+  } else if (/^\/(therapist|dashboard|account)(\/|$)/.test(pathname)) {
+    inferredAuthProps = { permissions: ALLOWED_ROLES };
+  } else if (/^\/(checkout|subscription)(\/|$)/.test(pathname)) {
+    inferredAuthProps = { permissions: ALLOWED_ROLES };
+  }
+
+  const finalAuthProps = componentAuthProps ?? inferredAuthProps;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -41,8 +57,8 @@ export default function App({Component,pageProps}: AppPropsWithLayout) {
         <UIProvider>
           <ModalProvider>
             <DefaultSeo {...defaultSeo} />
-            {authProps ? (
-              <PrivateRoute authProps={authProps}>
+            {finalAuthProps ? (
+              <PrivateRoute authProps={finalAuthProps}>
                 <Layout {...pageProps}>
                   <Component {...pageProps} />
                 </Layout>

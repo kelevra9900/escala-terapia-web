@@ -14,6 +14,7 @@ export type NextPageWithLayout<P = {}> = NextPage<P> & {
 
 export type QuestionType = 'SHORT_ANSWER' | 'PARAGRAPH' | 'MULTIPLE_CHOICE' | 'CHECKBOXES' | 'DROPDOWN';
 
+
 export interface FormQuestion {
 	id: string;
 	text: string;
@@ -131,12 +132,20 @@ export type Reponse = {
 export type FormResponses = {
 	id: string;
 	filledAt: string;
-	clientId: string;
-	clientName: string;
-	clientEmail: string;
-	formTemplateTitle: string;
-	responses: FormResponseAnswer[];
-}
+	level: 'MINIMAL' | 'MILD' | 'MODERATE' | 'SEVERE';
+	client: {
+		id: string;
+		name: string;
+		email?: string | null;
+		avatarUrl?: string | null;
+		gender?: string
+	};
+	formTemplate: {
+		id: string;
+		title: string;
+	};
+};
+
 
 export type UserListItem = {
 	id: string;
@@ -234,6 +243,27 @@ export type FormResponseAnswer = {
 	type: QuestionType;
 	answer: string;
 };
+
+export type FormInvitation = {
+	id: string;
+	token: string;
+	therapistId: string;
+	clientId: string;
+	formTemplateId: string;
+	isCompleted: boolean;
+	createdAt: string;
+	expiresAt?: string | null;
+	client: {
+		id: string;
+		name: string;
+		email?: string | null;
+	};
+	formTemplate: {
+		id: string;
+		title: string;
+	};
+};
+
 
 export type FormTemplateSummary = {
 	id: string;

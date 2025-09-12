@@ -80,27 +80,27 @@ export const siteSettings = {
 			},
 			therapist: {
 				root: {
-					href: Routes.dashboard,
+					href: Routes.therapistClients.list,
 					label: 'Panel',
 					icon: 'DashboardIcon',
 					childMenu: [
 						{
-							href: Routes.dashboard,
+							href: Routes.therapistClients.list,
 							label: 'Inicio',
 							icon: 'DashboardIcon',
 						},
 						{
-							href: Routes.therapistClients,
+							href: Routes.therapistClients.list,
 							label: 'Mis Pacientes',
 							icon: 'AuthorIcon',
 						},
 						{
-							href: Routes.therapistForms,
+							href: Routes.therapistForms.list,
 							label: 'Formularios',
 							icon: 'TaxesIcon',
 						},
 						{
-							href: Routes.therapistAppointments,
+							href: Routes.therapistAppointments.list,
 							label: 'Sesiones',
 							icon: 'RefundsIcon',
 						},

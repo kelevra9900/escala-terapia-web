@@ -1,6 +1,8 @@
 import {GetServerSideProps} from "next";
 import AppLayout from "@/components/organisms/Layout/AppLayout";
-import {getAuthCredentials} from "@/utils/auth";
+import {getAuthCredentials,hasAccess} from "@/utils/auth";
+import {ONLY_ADMIN_ROLE} from "@/utils/constants";
+import {Routes} from "@/settings/routes";
 
 
 export default function Reports() {
@@ -17,10 +19,9 @@ Reports.Layout = AppLayout;
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const {permissions} = getAuthCredentials(ctx);
-	return {
-		props: {
-			userPermissions: permissions,
-		},
-	};
+	const {token,permissions} = getAuthCredentials(ctx);
+	if (!token || !hasAccess(ONLY_ADMIN_ROLE,permissions)) {
+		return {redirect: {destination: Routes.login,permanent: false}};
+	}
+	return {props: {userPermissions: permissions}};
 };

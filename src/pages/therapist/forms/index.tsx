@@ -4,7 +4,9 @@ import {Card,Loader,PageHeading,Seo} from "@/components/atoms";
 import {FormTable} from "@/components/organisms";
 import AppLayout from "@/components/organisms/Layout/AppLayout";
 import {useGetForms} from "@/data/therapist";
-import {getAuthCredentials} from "@/utils/auth";
+import {getAuthCredentials,hasAccess} from "@/utils/auth";
+import {ALLOWED_ROLES} from "@/utils/constants";
+import {Routes} from "@/settings/routes";
 import {useEffect,useState} from "react";
 import {Meta} from "@/types";
 import Search from "@/components/molecules/Searchbar";
@@ -94,11 +96,9 @@ TherapistForms.Layout = AppLayout;
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const {permissions} = getAuthCredentials(ctx);
-	return {
-		props: {
-			userPermissions: permissions,
-		},
-	};
+	const {token,permissions} = getAuthCredentials(ctx);
+	if (!token || !hasAccess(ALLOWED_ROLES,permissions)) {
+		return {redirect: {destination: Routes.login,permanent: false}};
+	}
+	return {props: {userPermissions: permissions}};
 };
-

@@ -11,10 +11,11 @@ import {usePaginatedUsers} from '@/data/user';
 import {useModalAction} from '@/context/ModalContext';
 import {Meta} from '@/types';
 import {GetServerSideProps} from 'next';
-import {getAuthCredentials} from '@/utils/auth';
+import {getAuthCredentials,hasAccess} from '@/utils/auth';
 import Loader from '@/components/atoms/Loader';
 import {PlusIcon} from '@heroicons/react/24/solid';
 import {useRouter} from 'next/router';
+import {ONLY_ADMIN_ROLE} from '@/utils/constants';
 
 export default function AdminUsers() {
 	const {openModal} = useModalAction();
@@ -104,12 +105,9 @@ export default function AdminUsers() {
 AdminUsers.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const {permissions} = getAuthCredentials(ctx);
-	console.log('User permissions:',permissions);
-	return {
-		props: {
-			userPermissions: permissions,
-		},
-	};
+	const {token,permissions} = getAuthCredentials(ctx);
+	if (!token || !hasAccess(ONLY_ADMIN_ROLE,permissions)) {
+		return {redirect: {destination: Routes.login,permanent: false}};
+	}
+	return {props: {userPermissions: permissions}};
 };
-

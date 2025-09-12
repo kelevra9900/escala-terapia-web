@@ -1,36 +1,34 @@
 import {useState,useEffect} from 'react';
 
-import {Card,LinkButton,PageHeading,Seo} from '@/components/atoms';
+import {Card,LinkButton,Loader,PageHeading,Seo} from '@/components/atoms';
 
 import AppLayout from '@/components/organisms/Layout/AppLayout';
-import {UserTable} from '@/components/organisms';
 import Search from '@/components/molecules/Searchbar';
 
-import {usePaginatedUsers} from '@/data/user';
 import {useModalAction} from '@/context/ModalContext';
-import {Meta} from '@/types';
 import {GetServerSideProps} from 'next';
-import {getAuthCredentials,hasAccess} from '@/utils/auth';
-import {Routes} from '@/settings/routes';
-import {ONLY_ADMIN_ROLE} from '@/utils/constants';
-import Loader from '@/components/atoms/Loader';
-import {PlusIcon} from '@heroicons/react/24/solid';
 import {useRouter} from 'next/router';
 
-export default function AdminUsers() {
+import {getAuthCredentials} from '@/utils/auth';
+import {PlusIcon} from '@heroicons/react/24/solid';
+import {useGetClients} from '@/data/therapist';
+import {Routes} from '@/settings/routes';
+import ClientTable from '@/components/organisms/ClientTable';
+import {Meta} from '@/types';
+
+
+export default function TherapistClients() {
 	const {openModal} = useModalAction();
 	const router = useRouter();
 
 	const [page,setPage] = useState(1);
 	const [search,setSearch] = useState('');
 	const [debouncedSearch,setDebouncedSearch] = useState(search);
-
-	const {data,isLoading} = usePaginatedUsers({
+	const {data,isLoading} = useGetClients({
 		page,
 		limit: 10,
 		search: debouncedSearch,
 	});
-
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
@@ -44,13 +42,18 @@ export default function AdminUsers() {
 	const handleOpenUserDelete = (userId: string) => {
 		openModal('BAN_CUSTOMER',userId);
 	}
-	const handleOpenUserEdit = (userId: string) => {
-		router.push(`/admin/users/${userId}/edit`);
-	};
 
 	function handleSearch({searchText}: {searchText: string}) {
 		setSearch(searchText);
 		setPage(1);
+	}
+
+	if (isLoading) {
+		return (
+			<div className="flex h-screen items-center justify-center">
+				<Loader className="h-10 w-10" />
+			</div>
+		);
 	}
 
 	return (
@@ -75,40 +78,36 @@ export default function AdminUsers() {
 							className="w-full"
 						/>
 						<LinkButton
-							href={`/admin/users/create`}
+							href={Routes.therapistClients.create}
 							variant="outline"
 							className="w-full md:w-auto"
 						>
 							<PlusIcon className="me-2 h-5 w-5" />
 							<span>Crear</span>
 						</LinkButton>
-
 					</div>
 				</Card>
 
-				{isLoading ? <Loader /> : (
-					<UserTable
-						users={data?.data || []}
-						meta={data?.meta || {} as Meta}
-						isLoading={isLoading}
-						onUserClick={(userId) => handleOpenUserEdit(userId)}
-						onUserDelete={(userId) => handleOpenUserDelete(userId)}
-						onPagination={(page) => setPage(page)}
-					/>
-				)}
+				<ClientTable
+					clients={data?.data || []}
+					meta={data?.meta as Meta}
+					onClientDelete={handleOpenUserDelete}
+					onClientClick={(id) => router.push(`/therapist/clients/${id}`)}
+					onPagination={(page) => setPage(page)}
+				/>
 			</>
 		</>
 	);
 };
 
-AdminUsers.Layout = AppLayout;
+TherapistClients.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const {token,permissions} = getAuthCredentials(ctx);
-	if (!token || !hasAccess(ONLY_ADMIN_ROLE,permissions)) {
-		return {
-			redirect: {destination: Routes.login,permanent: false},
-		};
-	}
-	return {props: {userPermissions: permissions}};
+	const {permissions} = getAuthCredentials(ctx);
+	return {
+		props: {
+			userPermissions: permissions,
+		},
+	};
 };
+

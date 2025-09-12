@@ -4,18 +4,17 @@ import {GetServerSideProps} from 'next';
 
 import {Card,LinkButton,PageHeading,Seo} from '@/components/atoms';
 import AppLayout from '@/components/organisms/Layout/AppLayout';
-// import {useModalAction} from '@/context/ModalContext';
 import Search from '@/components/molecules/Searchbar';
 import Loader from '@/components/atoms/Loader';
 import {PlusIcon} from '@heroicons/react/24/solid';
-import {getAuthCredentials} from '@/utils/auth';
+import {getAuthCredentials,hasAccess} from '@/utils/auth';
 import {Routes} from '@/settings/routes';
 import {usePaginatedFormTemplates} from '@/data/forms';
 import {FormTemplateTable} from '@/components/organisms';
 import {Meta} from '@/types';
+import {ONLY_ADMIN_ROLE} from '@/utils/constants';
 
 export default function AdminFormTemplates() {
-	// const {openModal} = useModalAction();
 	const router = useRouter();
 
 	const [page,setPage] = useState(1);
@@ -101,10 +100,9 @@ export default function AdminFormTemplates() {
 AdminFormTemplates.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const {permissions} = getAuthCredentials(ctx);
-	return {
-		props: {
-			userPermissions: permissions,
-		},
-	};
+	const {token,permissions} = getAuthCredentials(ctx);
+	if (!token || !hasAccess(ONLY_ADMIN_ROLE,permissions)) {
+		return {redirect: {destination: Routes.login,permanent: false}};
+	}
+	return {props: {userPermissions: permissions}};
 };

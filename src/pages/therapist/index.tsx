@@ -1,113 +1,208 @@
-import {useState,useEffect} from 'react';
+import {GetServerSideProps} from "next";
 
-import {Card,LinkButton,Loader,PageHeading,Seo} from '@/components/atoms';
+import {Seo,Card,PageHeading} from "@/components/atoms";
+import AppLayout from "@/components/organisms/Layout/AppLayout";
+import {getAuthCredentials,hasAccess} from "@/utils/auth";
+import {ALLOWED_ROLES} from "@/utils/constants";
+import {Routes} from "@/settings/routes";
+import {
+	UserGroupIcon,
+	CheckCircleIcon,
+	ClockIcon,
+	CalendarDaysIcon
+} from '@heroicons/react/24/solid';
+import StatCard from "@/components/atoms/StatCard";
+import {FormInvitation,FormResponses} from "@/types";
+import PendingInvitationsTable from "@/components/organisms/PendingInvitationsTable";
+import QuickActions from "@/components/molecules/QuickActions";
+import {LatestResponsesTable} from "@/components/organisms/LatestResponsesTable";
 
-import AppLayout from '@/components/organisms/Layout/AppLayout';
-import Search from '@/components/molecules/Searchbar';
+export const mockFormResponses: FormResponses[] = [
+	{
+		id: 'res_1',
+		filledAt: '2025-07-25T14:32:00.000Z',
+		level: 'MILD',
+		client: {
+			id: 'cli_1',
+			name: 'Laura Méndez',
+			email: 'laura.mendez@gmail.com',
+			gender: 'FEMALE',
+		},
+		formTemplate: {
+			id: 'form_1',
+			title: 'Escala de ansiedad GAD-7',
+		},
+	},
+	{
+		id: 'res_2',
+		filledAt: '2025-07-24T10:15:00.000Z',
+		level: 'SEVERE',
+		client: {
+			id: 'cli_2',
+			name: 'José García',
+			email: 'jose.garcia@hotmail.com',
+			gender: 'MALE',
+		},
+		formTemplate: {
+			id: 'form_2',
+			title: 'Evaluación inicial emocional',
+		},
+	},
+	{
+		id: 'res_3',
+		filledAt: '2025-07-22T17:45:00.000Z',
+		level: 'MINIMAL',
+		client: {
+			id: 'cli_3',
+			name: 'Andrea Ruiz',
+			email: 'andrea.ruiz@example.com',
+			gender: 'FEMALE',
+		},
+		formTemplate: {
+			id: 'form_3',
+			title: 'Inventario de Depresión de Beck',
+		},
+	},
+];
 
-import {useModalAction} from '@/context/ModalContext';
-import {GetServerSideProps} from 'next';
-import {useRouter} from 'next/router';
 
-import {getAuthCredentials} from '@/utils/auth';
-import {PlusIcon} from '@heroicons/react/24/solid';
-import {useGetClients} from '@/data/therapist';
-import {Routes} from '@/settings/routes';
-import ClientTable from '@/components/organisms/ClientTable';
-import {Meta} from '@/types';
-
-
+export const mockPendingInvitations: FormInvitation[] = [
+	{
+		id: 'inv-001',
+		token: 'token-abc123',
+		therapistId: 'ther-001',
+		clientId: 'cli-001',
+		formTemplateId: 'form-001',
+		isCompleted: false,
+		createdAt: '2025-07-20T12:00:00Z',
+		expiresAt: '2025-08-01T10:00:00Z',
+		client: {
+			id: 'cli-001',
+			name: 'Carlos López',
+			email: 'carlos.lopez@example.com',
+		},
+		formTemplate: {
+			id: 'form-001',
+			title: 'Escala de ansiedad GAD-7',
+		},
+	},
+	{
+		id: 'inv-002',
+		token: 'token-def456',
+		therapistId: 'ther-001',
+		clientId: 'cli-002',
+		formTemplateId: 'form-002',
+		isCompleted: false,
+		createdAt: '2025-07-21T14:30:00Z',
+		expiresAt: null,
+		client: {
+			id: 'cli-002',
+			name: 'Lucía García',
+			email: 'lucia.garcia@example.com',
+		},
+		formTemplate: {
+			id: 'form-002',
+			title: 'Evaluación emocional inicial',
+		},
+	},
+	{
+		id: 'inv-003',
+		token: 'token-ghi789',
+		therapistId: 'ther-001',
+		clientId: 'cli-003',
+		formTemplateId: 'form-003',
+		isCompleted: false,
+		createdAt: '2025-07-19T08:45:00Z',
+		expiresAt: '2025-07-30T12:00:00Z',
+		client: {
+			id: 'cli-003',
+			name: 'Martín Herrera',
+			email: 'martin.herrera@example.com',
+		},
+		formTemplate: {
+			id: 'form-003',
+			title: 'Inventario de depresión de Beck',
+		},
+	},
+];
 export default function TherapistDashboard() {
-	const {openModal} = useModalAction();
-	const router = useRouter();
-
-	const [page,setPage] = useState(1);
-	const [search,setSearch] = useState('');
-	const [debouncedSearch,setDebouncedSearch] = useState(search);
-	const {data,isLoading} = useGetClients({
-		page,
-		limit: 10,
-		search: debouncedSearch,
-	});
-
-	useEffect(() => {
-		const timeout = setTimeout(() => {
-			setDebouncedSearch(search);
-			setPage(1);
-		},500);
-
-		return () => clearTimeout(timeout);
-	},[search]);
-
-	const handleOpenUserDelete = (userId: string) => {
-		openModal('BAN_CUSTOMER',userId);
-	}
-
-	function handleSearch({searchText}: {searchText: string}) {
-		setSearch(searchText);
-		setPage(1);
-	}
-
-	if (isLoading) {
-		return (
-			<div className="flex h-screen items-center justify-center">
-				<Loader className="h-10 w-10" />
-			</div>
-		);
-	}
-
 	return (
 		<>
 			<Seo
-				title="Panel de Administración – Escala Terapia"
-				description="Administra usuarios, suscripciones y formularios clínicos desde un solo lugar."
-				url="https://escala-terapia.com/dashboard"
-				noIndex
+				title="Dashboard del Terapeuta – Escala Terapia"
+				description="Resumen de actividad, pacientes, formularios y respuestas recientes."
+				url="https://escala-terapia.com/therapist"
 			/>
-			<>
-				<Card className="mb-8 flex flex-col items-center md:flex-row bg-white dark:bg-dark-1000">
-					<div className="mb-4 md:mb-0 md:w-1/4">
-						<PageHeading title={'Control de usuarios'} />
-					</div>
 
-					<div className="flex w-full flex-col items-center space-y-4 space-x-4 ms-auto md:w-3/4 md:flex-row md:space-y-0 xl:w-2/4">
-						<Search
-							onSearch={handleSearch}
-							placeholderText={'Buscar usuario por nombre o email'}
-							variant="outline"
-							className="w-full"
-						/>
-						<LinkButton
-							href={Routes.therapistClients.create}
-							variant="outline"
-							className="w-full md:w-auto"
-						>
-							<PlusIcon className="me-2 h-5 w-5" />
-							<span>Crear</span>
-						</LinkButton>
-					</div>
+			<PageHeading title="Bienvenido de nuevo" subtitle="Aquí tienes un resumen de tu actividad reciente" />
+
+			<div className="space-y-8">
+				{/* Estadísticas */}
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+					<StatCard
+						title="Pacientes"
+						value={6}
+						icon={<UserGroupIcon className="w-5 h-5" />}
+						variant="primary"
+					/>
+
+					<StatCard
+						title="Pendientes"
+						value={3}
+						icon={<ClockIcon className="w-5 h-5" />}
+						variant="secondary"
+					/>
+
+					<StatCard
+						title="Completados"
+						value={12}
+						icon={<CheckCircleIcon className="w-5 h-5" />}
+						variant="primary"
+					/>
+
+					<StatCard
+						title="Última respuesta"
+						value="25/07/2025"
+						icon={<CalendarDaysIcon className="w-5 h-5" />}
+						variant="neutral"
+					/>
+				</div>
+
+				{/* Últimas respuestas */}
+				<Card>
+					<PageHeading
+						title="Últimos formularios completados"
+						subtitle="Respuestas recibidas recientemente por tus pacientes"
+					/>
+					<LatestResponsesTable responses={mockFormResponses} />
 				</Card>
 
-				<ClientTable
-					clients={data?.data || []}
-					meta={data?.meta as Meta}
-					onClientDelete={handleOpenUserDelete}
-					onClientClick={(id) => router.push(`/therapist/clients/${id}`)}
-					onPagination={(page) => setPage(page)}
-				/>
-			</>
+				{/* Formularios pendientes */}
+				<Card>
+					<PageHeading
+						title="Formularios pendientes"
+						subtitle="Pacientes que aún no han completado el formulario"
+					/>
+					<PendingInvitationsTable invitations={mockPendingInvitations} />
+				</Card>
+			</div>
+
+
+			{/* Atajos */}
+			<Card className="mb-8">
+				<PageHeading title="Acciones rápidas" />
+				<QuickActions />
+			</Card>
 		</>
 	);
-};
+}
 
 TherapistDashboard.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const {permissions} = getAuthCredentials(ctx);
-	return {
-		props: {
-			userPermissions: permissions,
-		},
-	};
+	const {token,permissions} = getAuthCredentials(ctx);
+	if (!token || !hasAccess(ALLOWED_ROLES,permissions)) {
+		return {redirect: {destination: Routes.login,permanent: false}};
+	}
+	return {props: {userPermissions: permissions}};
 };
-

@@ -27,10 +27,10 @@ export const Routes = {
 		...routesFactory('/admin/therapists'),
 	},
 	therapistClients: {
-		list: '/therapist/clients',
-		create: '/therapist/clients/create',
-		edit: (id: string) => `/therapist/clients/${id}/edit`,
-		details: (id: string) => `/therapist/clients/${id}`,
+		list: '/therapist/patients',
+		create: '/therapist/patients/create',
+		edit: (id: string) => `/therapist/patients/${id}/edit`,
+		details: (id: string) => `/therapist/patients/${id}`,
 	},
 	therapistAppointments: {
 		list: '/therapist/appointments',

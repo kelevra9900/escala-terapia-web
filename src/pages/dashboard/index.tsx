@@ -11,7 +11,8 @@ import {usePaginatedUsers} from '@/data/user';
 import {useModalAction} from '@/context/ModalContext';
 import {Meta} from '@/types';
 import {GetServerSideProps} from 'next';
-import {getAuthCredentials} from '@/utils/auth';
+import {getAuthCredentials,hasAccess} from '@/utils/auth';
+import {ALLOWED_ROLES} from '@/utils/constants';
 import Loader from '@/components/atoms/Loader';
 import {PlusIcon} from '@/components/atoms/Icons/plus-icon';
 
@@ -98,11 +99,9 @@ export default function AdminDashboard() {
 AdminDashboard.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const {permissions} = getAuthCredentials(ctx);
-	return {
-		props: {
-			userPermissions: permissions,
-		},
-	};
+	const {token,permissions} = getAuthCredentials(ctx);
+	if (!token || !hasAccess(ALLOWED_ROLES,permissions)) {
+		return {redirect: {destination: Routes.login,permanent: false}};
+	}
+	return {props: {userPermissions: permissions}};
 };
-
