@@ -100,14 +100,24 @@ export const siteSettings = {
 							icon: 'TaxesIcon',
 						},
 						{
-							href: Routes.therapistAppointments.list,
-							label: 'Sesiones',
-							icon: 'RefundsIcon',
+							href: Routes.therapistInvitations.list,
+							label: 'Invitaciones',
+							icon: 'InformationIcon',
 						},
 						{
-							href: Routes.therapistMessages,
-							label: 'Mensajes',
-							icon: 'TransactionsIcon',
+							href: Routes.therapistReports.list,
+							label: 'Reportes',
+							icon: 'DiaryIcon',
+						},
+						{
+							href: Routes.therapistAnalytics.overview,
+							label: 'Analítica',
+							icon: 'ReviewIcon',
+						},
+						{
+							href: Routes.therapistSettings.forms,
+							label: 'Configuración',
+							icon: 'SettingsIcon',
 						},
 						{
 							href: Routes.therapistProfile,

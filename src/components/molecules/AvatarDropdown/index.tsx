@@ -22,9 +22,11 @@ import {UserRole} from '@/types'
 interface Props {
 	className?: string
 	role?: UserRole
+	name?: string
+	email?: string
 }
 
-export default function AvatarDropdown({className = '',role}: Props) {
+export default function AvatarDropdown({className = '',role,email,name}: Props) {
 
 	return (
 		<>
@@ -52,8 +54,8 @@ export default function AvatarDropdown({className = '',role}: Props) {
 											<Avatar sizeClass="w-12 h-12" />
 
 											<div className="flex-grow">
-												<h4 className="font-semibold">Roger Torres</h4>
-												<p className="mt-0.5 text-xs">Los Angeles, CA</p>
+												<h4 className="font-semibold">{name}</h4>
+												<p className="mt-0.5 text-xs">{email}</p>
 											</div>
 										</div>
 
@@ -61,7 +63,7 @@ export default function AvatarDropdown({className = '',role}: Props) {
 
 										{/* ------------------ 1 --------------------- */}
 										<Link
-											href={'/account'}
+											href={'/therapist/profile'}
 											className="-m-3 flex items-center rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
 											onClick={() => close()}
 										>
@@ -77,7 +79,7 @@ export default function AvatarDropdown({className = '',role}: Props) {
 
 
 										<Link
-											href={role === UserRole.ADMIN ? Routes.adminUsers.list : Routes.home}
+											href={role === UserRole.ADMIN ? Routes.adminUsers.list : Routes.therapistDashboard.home}
 											className="-m-3 flex items-center rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
 											onClick={() => close()}
 										>
@@ -93,7 +95,7 @@ export default function AvatarDropdown({className = '',role}: Props) {
 
 										{/* ------------------ 2 --------------------- */}
 										<Link
-											href={'#'}
+											href={Routes.therapistDashboard.forms}
 											className="-m-3 flex items-center rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
 											onClick={() => close()}
 										>
@@ -111,7 +113,7 @@ export default function AvatarDropdown({className = '',role}: Props) {
 
 										{/* ------------------ 2 --------------------- */}
 										<Link
-											href={'/account'}
+											href={'/therapist/profile'}
 											className="-m-3 flex items-center rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
 											onClick={() => close()}
 										>

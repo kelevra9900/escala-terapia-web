@@ -35,13 +35,11 @@ const Header = ({className}: HeaderProps) => {
 							{meInfo && (
 								<>
 									<div className="hidden gap-x-1 lg:flex">
-										<LangDropdown />
-										<NotifyDropdown />
 										<AvatarDropdown role={meInfo.role} />
 									</div>
 									<div className="flex gap-x-2 lg:hidden">
 										<NotifyDropdown />
-										<AvatarDropdown role={meInfo.role} />
+										<AvatarDropdown role={meInfo.role} name={meInfo.name} email={meInfo.email} />
 										<MenuBar />
 									</div>
 								</>

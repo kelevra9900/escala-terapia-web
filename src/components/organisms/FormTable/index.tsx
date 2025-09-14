@@ -1,6 +1,8 @@
 import {Table} from "@/components/atoms/Table";
 import Pagination from "@/components/molecules/Pagination";
 import {AnxietyLevel,Meta,Reponse} from "@/types";
+import {EyeIcon, TrashIcon} from '@heroicons/react/24/outline';
+import classNames from 'classnames';
 
 
 type Props = {
@@ -19,6 +21,21 @@ const FormTable = ({
 	onPagination = () => { }
 }: Props) => {
 	console.log('FormTable data:',data);
+	const getBadgeColor = (level?: string | null) => {
+		switch (level) {
+			case 'SEVERE':
+				return 'bg-red-100 text-red-700';
+			case 'MODERATE':
+				return 'bg-yellow-100 text-yellow-700';
+			case 'MILD':
+				return 'bg-blue-100 text-blue-700';
+			case 'MINIMAL':
+				return 'bg-green-100 text-green-700';
+			default:
+				return 'bg-gray-100 text-gray-600';
+		}
+	};
+
 	const columns = [
 		{
 			title: 'Cliente',
@@ -62,8 +79,16 @@ const FormTable = ({
 			key: 'level',
 			width: 120,
 			align: 'center' as const,
-			render: (level: AnxietyLevel | null) =>
-				level ? level.charAt(0) + level.slice(1).toLowerCase() : '—',
+			render: (level: AnxietyLevel | null) => (
+				<span
+					className={classNames(
+						'px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase',
+						getBadgeColor(level)
+					)}
+				>
+					{level ?? 'N/A'}
+				</span>
+			),
 		},
 		{
 			title: 'Acciones',
@@ -71,18 +96,22 @@ const FormTable = ({
 			align: 'center' as const,
 			width: 160,
 			render: (_: string,record: Reponse) => (
-				<div className="flex justify-center space-x-2">
+				<div className="flex justify-center gap-3">
 					<button
 						onClick={() => onResponseClick(record.id)}
-						className="text-blue-500 hover:text-blue-700"
+						className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800"
+						aria-label="Ver respuesta"
 					>
-						Ver
+						<EyeIcon className="w-4 h-4" />
+						<span>Ver</span>
 					</button>
 					<button
 						onClick={() => onResponseDelete(record.id)}
-						className="text-red-500 hover:text-red-700"
+						className="inline-flex items-center gap-1 text-red-600 hover:text-red-800"
+						aria-label="Eliminar respuesta"
 					>
-						Eliminar
+						<TrashIcon className="w-4 h-4" />
+						<span>Eliminar</span>
 					</button>
 				</div>
 			),
@@ -95,12 +124,11 @@ const FormTable = ({
 				columns={columns}
 				emptyText={() => (
 					<div className="flex flex-col items-center py-7">
-						{/* <NoDataFound className="w-52" /> */}
 						<div className="mb-1 pt-6 text-base font-semibold text-heading">
-							No Data Found
+							No hay respuestas
 						</div>
-						<p className="text-[13px]">
-							There are no users to display. Please add some users to see them here.
+						<p className="text-[13px] text-gray-500 text-center max-w-xs">
+							Cuando tus pacientes completen formularios, los verás aquí.
 						</p>
 					</div>
 				)}

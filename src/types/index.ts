@@ -79,13 +79,13 @@ export type User = {
 	exp: number;
 }
 
-export type LoginResponseError = {
+export type GenericError = {
 	message: string | string[];
 	error: string;
 	statusCode: number;
 }
 
-export type LoginResponse = LoginResponseSuccess | LoginResponseError;
+export type LoginResponse = LoginResponseSuccess | GenericError;
 
 export enum UserRole {
 	ADMIN = 'ADMIN',
@@ -114,8 +114,8 @@ export type Client = {
 export type CreateClientInput = Omit<Client,'id' | 'createdAt'> & {
 	name: string;
 	email: string;
-	birthdate?: string | null;
-	gender?: string;
+	birthDate?: string | null;
+	gender?: 'MALE' | 'FEMALE' | 'OTHER';
 	notes?: string | null;
 };
 
@@ -286,3 +286,22 @@ export type FormInvitationWithResponses = {
 	score?: number | null;
 	level?: AnxietyLevel | null;
 };
+
+export type ResponsesAvaibales = {
+	id: string;
+	filledAt: string; // o `Date`, si luego lo transformas
+	clientName: string,
+	clientEmail: string,
+	formTemplate: FormTemplateSummary;
+	responses: FormResponseAnswer[];
+	score?: number | null;
+	level?: AnxietyLevel | null;
+}
+
+export type AvailableForm = {
+	id: string
+	title: string
+	description: string
+	createdAt: string
+	updatedAt: string
+}

@@ -27,8 +27,6 @@ const SidebarItem = ({
 
 	const sanitizedPath = router?.asPath?.split('#')[0]?.split('?')[0];
 
-	console.log('sanitizedPath',sanitizedPath,'href',href);
-
 	return (
 		<Link
 			href={href}

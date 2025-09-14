@@ -1,6 +1,8 @@
 import {GetServerSideProps} from "next";
 
-import {Card,Loader,PageHeading,Seo} from "@/components/atoms";
+import {Card,Loader,PageHeading,Seo,DefaultButton,Select} from "@/components/atoms";
+import StatCard from '@/components/atoms/StatCard';
+import {DocumentCheckIcon} from '@heroicons/react/24/outline';
 import {FormTable} from "@/components/organisms";
 import AppLayout from "@/components/organisms/Layout/AppLayout";
 import {useGetForms} from "@/data/therapist";
@@ -8,14 +10,17 @@ import {getAuthCredentials,hasAccess} from "@/utils/auth";
 import {ALLOWED_ROLES} from "@/utils/constants";
 import {Routes} from "@/settings/routes";
 import {useEffect,useState} from "react";
+import {useRouter} from 'next/router';
 import {Meta} from "@/types";
 import Search from "@/components/molecules/Searchbar";
 
 
 export default function TherapistForms() {
+	const router = useRouter();
 	const [page,setPage] = useState(1);
 	const [search,setSearch] = useState('');
 	const [debouncedSearch,setDebouncedSearch] = useState(search);
+	const [levelFilter,setLevelFilter] = useState<any>(null);
 
 	const {data,isLoading} = useGetForms({
 		page,
@@ -51,6 +56,36 @@ export default function TherapistForms() {
 
 	console.log('Forms data:',data);
 
+	// Mock para tabla cuando no hay datos del servidor
+	const mockData = [
+		{
+			id: 'resp-1',
+			filledAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
+			clientName: 'Roger Torres',
+			clientEmail: 'roger.torres@example.com',
+			formTemplateTitle: 'GAD-7 – Ansiedad Generalizada',
+			score: 8,
+			level: 'MILD' as const,
+		},
+		{
+			id: 'resp-2',
+			filledAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString(),
+			clientName: 'Ana López',
+			clientEmail: 'ana.lopez@example.com',
+			formTemplateTitle: 'PHQ-9 – Depresión',
+			score: 3,
+			level: 'MINIMAL' as const,
+		},
+	];
+
+	const displayData = (data?.data && data.data.length > 0 ? data.data : mockData);
+	const displayMeta = (data?.meta ?? {
+		totalCount: displayData.length,
+		totalPages: 1,
+		currentPage: 1,
+		pageSize: displayData.length,
+	});
+
 	return (
 		<>
 			<Seo
@@ -62,25 +97,60 @@ export default function TherapistForms() {
 
 			<Card className="mb-8 flex flex-col items-center md:flex-row bg-white dark:bg-dark-1000">
 				<div className="mb-4 md:mb-0 md:w-1/4">
-					<PageHeading title={'Formularios terminados'} />
+					<PageHeading title={'Formularios completados'} />
 				</div>
 
-				<div className="flex w-full flex-col items-center space-y-4 space-x-4 ms-auto md:w-3/4 md:flex-row md:space-y-0 xl:w-2/4">
+				<div className="flex w-full flex-col items-center space-y-4 space-x-4 ms-auto md:w-3/4 md:flex-row md:space-y-0 xl:w-3/4">
 					<Search
 						onSearch={handleSearch}
-						placeholderText={'Buscar usuario por nombre o email'}
+						placeholderText={'Buscar por paciente o formulario'}
 						variant="outline"
 						className="w-full"
 					/>
 
+					<div className="w-full md:w-64">
+						<Select
+							label="Nivel"
+							placeholder="Todos los niveles"
+							options={[
+								{value: '',label: 'Todos'},
+								{value: 'MINIMAL',label: 'Minimal'},
+								{value: 'MILD',label: 'Leve'},
+								{value: 'MODERATE',label: 'Moderado'},
+								{value: 'SEVERE',label: 'Severo'},
+							]}
+							value={levelFilter}
+							onChange={(opt) => setLevelFilter(opt)}
+						/>
+					</div>
+
+					<DefaultButton
+						variant="outline"
+						className="whitespace-nowrap"
+						onClick={() => console.log('Export CSV')}
+					>
+						Exportar CSV
+					</DefaultButton>
 				</div>
 			</Card>
 
+			{/* Resumen */}
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+				<StatCard
+					title="Total de respuestas"
+					value={data?.meta?.totalCount ?? 0}
+					icon={<DocumentCheckIcon className="w-6 h-6" />}
+					variant="primary"
+				/>
+			</div>
+
 			<FormTable
-				data={data?.data || []}
-				meta={data?.meta as Meta}
+				data={displayData.filter((r) =>
+					levelFilter?.value ? r.level === levelFilter.value : true
+				)}
+				meta={displayMeta as Meta}
 				onResponseClick={(id) => {
-					console.log('Response clicked:',id);
+					router.push(Routes.therapistForms.responses(id));
 				}}
 				onResponseDelete={(id) => {
 					console.log('Response deleted:',id);

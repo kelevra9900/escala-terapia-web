@@ -1,12 +1,14 @@
 import {Table} from "@/components/atoms/Table";
 import Pagination from "@/components/molecules/Pagination";
 import {Client,Meta} from "@/types";
+import {EyeIcon,TrashIcon,ClipboardDocumentListIcon} from '@heroicons/react/24/outline';
 
 type Props = {
 	clients: Client[];
 	meta: Meta;
 	onClientClick: (clientId: string) => void;
 	onClientDelete: (clientId: string) => void;
+	onAssignForm?: (client: Client) => void;
 	onPagination: (page: number,pageSize?: number) => void;
 }
 const ClientTable = ({
@@ -14,6 +16,7 @@ const ClientTable = ({
 	meta = {totalCount: 0,totalPages: 0,currentPage: 1,pageSize: 10},
 	onClientClick = () => { },
 	onClientDelete = () => { },
+	onAssignForm = () => { },
 	onPagination = () => { }
 }: Props) => {
 
@@ -32,12 +35,12 @@ const ClientTable = ({
 		},
 		{
 			title: 'Fecha de nacimiento',
-			dataIndex: 'birthdate',
-			key: 'birthdate',
+			dataIndex: 'birthday',
+			key: 'birthday',
 			width: 140,
 			align: 'center' as const,
-			render: (birthdate?: string) =>
-				birthdate ? new Date(birthdate).toLocaleDateString() : '—',
+			render: (birthday?: string) =>
+				birthday ? new Date(birthday).toLocaleDateString() : '—',
 		},
 		{
 			title: 'Género',
@@ -49,31 +52,43 @@ const ClientTable = ({
 		},
 		{
 			title: 'Registrado',
-			dataIndex: 'createdAt',
-			key: 'createdAt',
+			dataIndex: 'created_at',
+			key: 'created_at',
 			width: 140,
 			align: 'center' as const,
-			render: (createdAt: string) =>
-				new Date(createdAt).toLocaleDateString(),
+			render: (created_at: string) =>
+				new Date(created_at).toLocaleDateString(),
 		},
 		{
 			title: 'Acciones',
 			key: 'actions',
-			width: 160,
+			width: 220,
 			align: 'center' as const,
 			render: (_: string,record: Client) => (
-				<div className="flex justify-center space-x-2">
+				<div className="flex justify-center gap-3">
 					<button
 						onClick={() => onClientClick(record.id)}
-						className="text-blue-500 hover:text-blue-700"
+						className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800"
+						aria-label="Ver paciente"
 					>
-						Ver
+						<EyeIcon className="w-4 h-4" />
+						<span>Ver</span>
+					</button>
+					<button
+						onClick={() => onAssignForm(record)}
+						className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800"
+						aria-label="Asignar formulario"
+					>
+						<ClipboardDocumentListIcon className="w-4 h-4" />
+						<span>Asignar</span>
 					</button>
 					<button
 						onClick={() => onClientDelete(record.id)}
-						className="text-red-500 hover:text-red-700"
+						className="inline-flex items-center gap-1 text-red-600 hover:text-red-800"
+						aria-label="Eliminar paciente"
 					>
-						Eliminar
+						<TrashIcon className="w-4 h-4" />
+						<span>Eliminar</span>
 					</button>
 				</div>
 			),
@@ -87,12 +102,11 @@ const ClientTable = ({
 				columns={columns}
 				emptyText={() => (
 					<div className="flex flex-col items-center py-7">
-						{/* <NoDataFound className="w-52" /> */}
 						<div className="mb-1 pt-6 text-base font-semibold text-heading">
-							No Data Found
+							No hay pacientes
 						</div>
-						<p className="text-[13px]">
-							There are no users to display. Please add some users to see them here.
+						<p className="text-[13px] text-gray-500 text-center max-w-xs">
+							Aún no has registrado pacientes. Crea uno nuevo para comenzar a asignar formularios.
 						</p>
 					</div>
 				)}

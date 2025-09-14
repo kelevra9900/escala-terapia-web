@@ -1,5 +1,5 @@
 import {HttpClient} from './http-client';
-import type {PaginatedResponse,FormTemplate,CreateFormTemplateInput,Form,FormInvitationWithResponses} from '@/types';
+import type {PaginatedResponse,FormTemplate,CreateFormTemplateInput,Form,FormInvitationWithResponses,ResponsesAvaibales} from '@/types';
 
 export const formTemplateClient = {
 	getPaginated: ({page,limit,search = ''}: {page: number; limit: number; search?: string}) =>
@@ -22,6 +22,11 @@ export const formTemplateClient = {
 		return HttpClient.post<void>(`/form-invitations/${token}/responses`,{answers});
 	},
 	getFormResponses: (token: string) => {
-		return HttpClient.get<FormInvitationWithResponses>(`/form-invitations/${token}/responses`);
+		return HttpClient.get<ResponsesAvaibales>(`/therapist/responses/${token}`);
 	},
+	updateFormInvitation: (uid: string,expiresAt: string) => {
+		return HttpClient.patch(`/form-invitations/${uid}`,{
+			expiresAt
+		})
+	}
 };

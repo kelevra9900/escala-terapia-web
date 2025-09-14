@@ -26,11 +26,19 @@ export const Routes = {
 	adminTherapists: {
 		...routesFactory('/admin/therapists'),
 	},
+	therapistDashboard: {
+		home: '/therapist',
+		forms: '/therapist/forms'
+	},
 	therapistClients: {
 		list: '/therapist/patients',
 		create: '/therapist/patients/create',
 		edit: (id: string) => `/therapist/patients/${id}/edit`,
 		details: (id: string) => `/therapist/patients/${id}`,
+		forms: (id: string) => `/therapist/patients/${id}/forms`,
+		responses: (id: string) => `/therapist/patients/${id}/responses`,
+		notes: (id: string) => `/therapist/patients/${id}/notes`,
+		files: (id: string) => `/therapist/patients/${id}/files`,
 	},
 	therapistAppointments: {
 		list: '/therapist/appointments',
@@ -46,9 +54,29 @@ export const Routes = {
 		list: '/therapist/forms',
 		assign: '/therapist/forms/assign',
 		responses: (invitationId: string) => `/therapist/forms/responses/${invitationId}`,
+		bulkAssign: '/therapist/forms/bulk-assign',
+	},
+
+	therapistTemplates: {
+		...routesFactory('/therapist/forms/templates'),
+	},
+	therapistInvitations: {
+		...routesFactory('/therapist/forms/invitations'),
 	},
 	therapistMessages: '/therapist/messages',
 	therapistProfile: '/therapist/profile',
+
+	therapistAnalytics: {
+		overview: '/therapist/analytics/overview',
+		forms: '/therapist/analytics/forms',
+		patients: '/therapist/analytics/patients',
+	},
+
+	therapistSettings: {
+		forms: '/therapist/settings/forms',
+		notifications: '/therapist/settings/notifications',
+		export: '/therapist/settings/export',
+	},
 };
 
 function routesFactory(endpoint: string) {

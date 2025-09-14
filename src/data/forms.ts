@@ -41,6 +41,13 @@ export const useFormTemplateById = (id: string) => {
 };
 
 
+export const useGetResponsesByIdForm = (id: string) => {
+	return useQuery({
+		queryKey: ['response',id],
+		queryFn: () => formTemplateClient.getFormResponses(id)
+	})
+}
+
 export const useCreateFormTemplate = () => {
 	const queryClient = useQueryClient();
 
@@ -71,6 +78,22 @@ export const useSubmitFormResponse = () => {
 		},
 	});
 };
+
+export const useUpdateExpirationForm = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: ({uid,expiresAt}: {uid: string,expiresAt: string}) => formTemplateClient.updateFormInvitation(uid,expiresAt),
+		onSuccess: async () => {
+			showSuccess('Formulario actualizado')
+			await queryClient.invalidateQueries({queryKey: ['therapist-clients']});
+		},
+		onError: (err) => {
+			console.error("Error al actualizar expiración",err)
+			showError('Error inesperado al actualizar el formulario')
+		}
+	})
+}
 
 export const useFormResponses = (token: string) => {
 	return useQuery({
