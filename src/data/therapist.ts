@@ -75,6 +75,18 @@ export const useGetPatient = (uid: string) => {
 	})
 }
 
+export const useDeletePatientMutation = () => {
+	return useMutation({
+		mutationFn: (id: string) => therapistClient.deletePatient(id),
+		onSuccess: () => {
+			showSuccess("Paciente eliminado")
+		},
+		onError: () => {
+			showError("Error inesperado al eliminar al paciente")
+		}
+	})
+}
+
 export const useGetAvailableForms = ({
 	page,
 	limit,

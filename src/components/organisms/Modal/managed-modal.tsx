@@ -6,6 +6,7 @@ import Modal from ".";
 
 const UserDelete = dynamic(() => import('@/components/molecules/Modals/user-delete'));
 const FormInvitationUpdate = dynamic(() => import('@/components/molecules/Modals/update-form-invitation'))
+const DeletePatient = dynamic(() => import('@/components/molecules/Modals/patient-delete'));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function renderModal(view: MODAL_VIEWS | undefined,data?: any) {
@@ -14,6 +15,8 @@ function renderModal(view: MODAL_VIEWS | undefined,data?: any) {
 			return <UserDelete userId={data} />;
 		case 'UPDATE_FORM_INVITATION':
 			return <FormInvitationUpdate data={data} />
+		case 'DELETE_PATIENT':
+			return <DeletePatient />
 		default:
 			return null;
 	}

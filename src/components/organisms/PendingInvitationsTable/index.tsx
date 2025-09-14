@@ -5,7 +5,6 @@ import {AlignType,Table} from '@/components/atoms/Table';
 import type {FormInvitation} from '@/types';
 import {formatDate} from '@/utils/manage-dates';
 import {useModalAction} from '@/context/ModalContext';
-import {useRouter} from 'next/router';
 import {showSuccess} from '@/utils/toasts';
 
 type Props = {
@@ -15,7 +14,6 @@ type Props = {
 const PendingInvitationsTable = ({invitations = []}: Props) => {
 	const [rows,setRows] = useState<FormInvitation[]>(invitations);
 	const {openModal} = useModalAction();
-	const router = useRouter();
 
 	useEffect(() => {
 		setRows(invitations);

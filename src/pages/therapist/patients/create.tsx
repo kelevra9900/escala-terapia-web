@@ -1,3 +1,5 @@
+import {useRouter} from "next/router";
+
 import {
 	Card,
 	DefaultButton,
@@ -23,6 +25,7 @@ export default function CreatePatient() {
 	const {mutate,isPending} = useCreateClientMutation();
 	const {data: meInfo} = useGetMeInfo();
 	type FormValues = z.infer<typeof clientSchema>;
+	const router = useRouter();
 
 	const {
 		register,
@@ -42,7 +45,13 @@ export default function CreatePatient() {
 			notes: data.notes ?? null,
 			birthDate: data.birthDate ?? null,
 		};
-		mutate(payload);
+		mutate(payload,{
+			onSuccess: () => {
+				setTimeout(() => {
+					router.back()
+				},500);
+			}
+		});
 	};
 
 	return (

@@ -305,3 +305,7 @@ export type AvailableForm = {
 	createdAt: string
 	updatedAt: string
 }
+
+export type GenericMessageResponse = {
+	message: string
+}

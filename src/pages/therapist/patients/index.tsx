@@ -42,7 +42,7 @@ export default function TherapistClients() {
 	},[search]);
 
 	const handleOpenUserDelete = (userId: string) => {
-		openModal('BAN_CUSTOMER',userId);
+		openModal('DELETE_PATIENT',userId);
 	}
 
 	function handleSearch({searchText}: {searchText: string}) {
@@ -69,7 +69,7 @@ export default function TherapistClients() {
 			<>
 				<Card className="mb-8 flex flex-col items-center md:flex-row bg-white dark:bg-dark-1000">
 					<div className="mb-4 md:mb-0 md:w-1/4">
-					<PageHeading title={'Pacientes'} />
+						<PageHeading title={'Pacientes'} />
 					</div>
 
 					<div className="flex w-full flex-col items-center space-y-4 space-x-4 ms-auto md:w-3/4 md:flex-row md:space-y-0 xl:w-2/4">
@@ -100,18 +100,18 @@ export default function TherapistClients() {
 					/>
 				</div>
 
-					<ClientTable
-						clients={data?.data || []}
-						meta={data?.meta as Meta}
-						onClientDelete={handleOpenUserDelete}
-						onClientClick={(id) => {
-							router.push(Routes.therapistClients.details(id))
-						}}
-						onAssignForm={(client) => {
-							router.push(`${Routes.therapistForms.assign}?clientId=${encodeURIComponent(client.id)}&clientName=${encodeURIComponent(client.name)}&clientEmail=${encodeURIComponent(client.email)}`)
-						}}
-						onPagination={(page) => setPage(page)}
-					/>
+				<ClientTable
+					clients={data?.data || []}
+					meta={data?.meta as Meta}
+					onClientDelete={handleOpenUserDelete}
+					onClientClick={(id) => {
+						router.push(Routes.therapistClients.details(id))
+					}}
+					onAssignForm={(client) => {
+						router.push(`${Routes.therapistForms.assign}?clientId=${encodeURIComponent(client.id)}&clientName=${encodeURIComponent(client.name)}&clientEmail=${encodeURIComponent(client.email)}`)
+					}}
+					onPagination={(page) => setPage(page)}
+				/>
 			</>
 		</>
 	);

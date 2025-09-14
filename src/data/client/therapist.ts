@@ -1,4 +1,4 @@
-import {AvailableForm,Client,CreateClientInput,FormResponses,PaginatedResponse,Reponse} from "@/types";
+import {AvailableForm,Client,CreateClientInput,FormResponses,GenericMessageResponse,PaginatedResponse,Reponse} from "@/types";
 import {HttpClient} from "./http-client";
 import {PatientResponse} from "@/types/patient";
 
@@ -38,5 +38,8 @@ export const therapistClient = {
 	},
 	getAvailableForms: ({page,limit}: {page: number,limit: number}) => {
 		return HttpClient.get<PaginatedResponse<AvailableForm[]>>(`/therapist/available-forms?page=${page}&limit=${limit}`)
+	},
+	deletePatient: (id: string) => {
+		return HttpClient.delete<GenericMessageResponse>(`/therapist/patients/${id}`)
 	}
 }
