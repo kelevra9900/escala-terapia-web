@@ -17,11 +17,14 @@ import {useGetClients} from '@/data/therapist';
 import {Routes} from '@/settings/routes';
 import ClientTable from '@/components/organisms/ClientTable';
 import {Meta} from '@/types';
+import {useGetMeInfo} from '@/data/user';
+import {showError} from '@/utils/toasts';
 
 
 export default function TherapistClients() {
 	const {openModal} = useModalAction();
 	const router = useRouter();
+	const {data: me,isPending} = useGetMeInfo()
 
 	const [page,setPage] = useState(1);
 	const [search,setSearch] = useState('');
@@ -108,7 +111,11 @@ export default function TherapistClients() {
 						router.push(Routes.therapistClients.details(id))
 					}}
 					onAssignForm={(client) => {
-						router.push(`${Routes.therapistForms.assign}?clientId=${encodeURIComponent(client.id)}&clientName=${encodeURIComponent(client.name)}&clientEmail=${encodeURIComponent(client.email)}`)
+						if (me?.subscriptionStatus !== 'INACTIVE') {
+							router.push(`${Routes.therapistForms.assign}?clientId=${encodeURIComponent(client.id)}&clientName=${encodeURIComponent(client.name)}&clientEmail=${encodeURIComponent(client.email)}`)
+						} else {
+							showError("Debes tener una subscripción activa")
+						}
 					}}
 					onPagination={(page) => setPage(page)}
 				/>

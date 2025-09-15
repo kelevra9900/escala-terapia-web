@@ -127,12 +127,6 @@ export default function Patient() {
 					>
 						<PlusIcon className="me-2 h-5 w-5" /> Asignar formulario
 					</LinkButton>
-					<LinkButton
-						href={Routes.therapistClients.edit(patient.id)}
-						className="whitespace-nowrap"
-					>
-						<PencilSquareIcon className="me-2 h-5 w-5" /> Editar
-					</LinkButton>
 				</div>
 			</div>
 
@@ -192,7 +186,9 @@ export default function Patient() {
 						</div>
 						<LatestResponsesTable
 							responses={latestResponses}
-							onViewResponse={(rid) => console.log('Ver respuesta',rid)}
+							onViewResponse={(rid) => {
+								router.push(Routes.forms.responses(rid))
+							}}
 							onDownloadResponse={(rid) => console.log('Descargar respuesta',rid)}
 							onDeleteResponse={(rid) => console.log('Eliminar respuesta',rid)}
 						/>

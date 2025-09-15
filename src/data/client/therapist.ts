@@ -41,5 +41,16 @@ export const therapistClient = {
 	},
 	deletePatient: (id: string) => {
 		return HttpClient.delete<GenericMessageResponse>(`/therapist/patients/${id}`)
+	},
+	changePassword: ({
+		actualPassword,
+		newPassword,
+		confirmPassword
+	}: {actualPassword: string,newPassword: string,confirmPassword: string}) => {
+		return HttpClient.post<GenericMessageResponse>("/auth/change-password",{
+			actualPassword,
+			newPassword,
+			confirmPassword
+		})
 	}
 }

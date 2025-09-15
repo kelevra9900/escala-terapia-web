@@ -17,7 +17,8 @@ export const useStartSubscription = () => {
 		},
 		onSuccess: (data) => {
 			if (data?.url) {
-				window.location.href = data.url;
+				// window.location.href = data.url;
+				console.log("Success =>>>",data)
 			}
 		},
 		onError: (err) => {

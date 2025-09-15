@@ -100,16 +100,6 @@ export const siteSettings = {
 							icon: 'TaxesIcon',
 						},
 						{
-							href: Routes.therapistInvitations.list,
-							label: 'Invitaciones',
-							icon: 'InformationIcon',
-						},
-						{
-							href: Routes.therapistReports.list,
-							label: 'Reportes',
-							icon: 'DiaryIcon',
-						},
-						{
 							href: Routes.therapistAnalytics.overview,
 							label: 'Analítica',
 							icon: 'ReviewIcon',

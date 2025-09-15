@@ -6,21 +6,20 @@ import {Avatar,Card,DefaultButton,Input,PageHeading,Seo,Select,Textarea,StickyFo
 import {Routes} from '@/settings/routes';
 import {getAuthCredentials,hasAccess} from '@/utils/auth';
 import {ALLOWED_ROLES} from '@/utils/constants';
-import {SubscriptionStatus} from '@/types';
 import {showSuccess,showError} from '@/utils/toasts';
 import {useGetMeInfo} from '@/data/user';
+import {useChangePasswordMutation} from '@/data/therapist';
 
 type Option = {value: string; label: string};
 
 export default function TherapistProfile() {
   const {data: me,isPending} = useGetMeInfo()
+  const {mutate: updatePassword,isPending: loading} = useChangePasswordMutation()
+
   // Mocked user profile data
   const [name,setName] = useState('Dra. Ana Psicóloga');
   const [email,setEmail] = useState('ana.terapeuta@example.com');
-  const [phone,setPhone] = useState('+52 55 0000 0000');
   const [about,setAbout] = useState('Terapeuta cognitivo-conductual con 8+ años de experiencia en ansiedad y depresión.');
-  const [gender,setGender] = useState<Option | null>({value: 'F',label: 'Femenino'});
-  const [subscription,setSubscription] = useState<SubscriptionStatus>(SubscriptionStatus.ACTIVE);
   const [plan,setPlan] = useState<Option>({value: 'PRO',label: 'Profesional'});
   // Seguridad
   const [currentPassword,setCurrentPassword] = useState('');
@@ -30,18 +29,6 @@ export default function TherapistProfile() {
   const [notifEmail,setNotifEmail] = useState(true);
   const [notifWhatsapp,setNotifWhatsapp] = useState(false);
   const [notifReminders,setNotifReminders] = useState(true);
-
-  const genderOptions: Option[] = [
-    {value: 'F',label: 'Femenino'},
-    {value: 'M',label: 'Masculino'},
-    {value: 'O',label: 'Otro / Prefiero no decir'},
-  ];
-  const planOptions: Option[] = [
-    {value: 'STARTER',label: 'Starter'},
-    {value: 'PRO',label: 'Profesional'},
-    {value: 'ADVANCED',label: 'Avanzado'},
-  ];
-
   const handleSave = () => {
     // Mock save
     showSuccess('Perfil actualizado (mock)');
@@ -64,10 +51,21 @@ export default function TherapistProfile() {
       showError('La nueva contraseña debe tener al menos 8 caracteres');
       return;
     }
-    showSuccess('Contraseña actualizada (mock)');
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
+    // Ejecutar mutación con los campos correctos y limpiar al éxito
+    updatePassword(
+      {
+        actualPassword: currentPassword,
+        newPassword,
+        confirmPassword,
+      },
+      {
+        onSuccess: () => {
+          setCurrentPassword('');
+          setNewPassword('');
+          setConfirmPassword('');
+        },
+      }
+    );
   };
 
   const handleSaveNotifications = () => {
@@ -93,7 +91,6 @@ export default function TherapistProfile() {
           <Card className="bg-white dark:bg-dark-1000">
             <div className="flex items-center gap-3">
               <Avatar
-                src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`}
                 sizeClass="h-14 w-14"
               />
               <div className="flex flex-col">
@@ -181,7 +178,13 @@ export default function TherapistProfile() {
               />
             </div>
             <div className="flex justify-end mt-4">
-              <DefaultButton onClick={handleChangePassword}>Actualizar contraseña</DefaultButton>
+              <DefaultButton
+                loading={isPending || loading}
+                onClick={handleChangePassword}
+                disabled={isPending || loading}
+              >
+                Actualizar contraseña
+              </DefaultButton>
             </div>
           </Card>
 

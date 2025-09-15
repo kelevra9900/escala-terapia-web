@@ -72,7 +72,6 @@ export default function AssignFormPage() {
           <Card className="bg-white dark:bg-dark-1000">
             <div className="flex items-center gap-3">
               <Avatar
-                src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(clientName)}`}
                 sizeClass="h-12 w-12"
               />
               <div className="flex flex-col">

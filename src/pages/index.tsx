@@ -43,15 +43,12 @@ export default function Home() {
               <span className="me-4 text-3xl leading-none md:text-4xl">💎</span>
               Suscripciones
             </h2>
-            <span className="mt-2 block text-sm font-(family-name:--font-inter) text-neutral-700 dark:text-neutral-200 sm:text-base">
-              Pricing to fit the needs of any companie size.
-            </span>
           </header>
           <section className="overflow-hidden text-sm text-neutral-600 md:text-base">
-            <div className="grid gap-5 lg:grid-cols-3 xl:gap-8">
-              {pricings.map((pricing,index) => (
-                <PricingItem key={index} pricing={pricing} onClick={handleSubscribeClick} />
-              ))}
+            <div className="mx-auto max-w-2xl">
+              {pricings?.length ? (
+                <PricingItem pricing={pricings[0]} onClick={handleSubscribeClick} key={pricings?.length} />
+              ) : null}
             </div>
           </section>
         </div>

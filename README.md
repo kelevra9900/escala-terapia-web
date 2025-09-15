@@ -167,3 +167,6 @@ El frontend está desarrollado en Next.js con arquitectura basada en Atomic Desi
  Exportación de reportes en PDF.
 
  Visualización gráfica de resultados históricos del paciente.
+
+<abrilpca@gmail.com>
+yL4EZ7LO1Ex1mszZ

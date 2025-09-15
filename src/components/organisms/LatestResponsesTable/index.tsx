@@ -75,13 +75,6 @@ export const LatestResponsesTable = ({
 								>
 									<ArrowDownTrayIcon className="w-4 h-4" />
 								</button>
-								<button
-									onClick={() => onDeleteResponse?.(res.id)}
-									className="hover:text-red-600 transition"
-									aria-label="Eliminar respuesta"
-								>
-									<TrashIcon className="w-4 h-4" />
-								</button>
 							</div>
 						</div>
 					</li>

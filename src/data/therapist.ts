@@ -87,6 +87,22 @@ export const useDeletePatientMutation = () => {
 	})
 }
 
+export const useChangePasswordMutation = () => {
+	return useMutation({
+		mutationFn: ({actualPassword,newPassword,confirmPassword}: {
+			actualPassword: string,
+			newPassword: string,
+			confirmPassword: string
+		}) => therapistClient.changePassword({actualPassword,newPassword,confirmPassword}),
+		onSuccess: (data) => {
+			showSuccess(data.message)
+		},
+		onError: () => {
+			showError("Ha ocurrido un error al actualizar la contraseña")
+		}
+	})
+}
+
 export const useGetAvailableForms = ({
 	page,
 	limit,

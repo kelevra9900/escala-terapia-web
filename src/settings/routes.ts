@@ -40,6 +40,9 @@ export const Routes = {
 		notes: (id: string) => `/therapist/patients/${id}/notes`,
 		files: (id: string) => `/therapist/patients/${id}/files`,
 	},
+	forms: {
+		responses: (id: string) => `/therapist/forms/responses/${id}`,
+	},
 	therapistAppointments: {
 		list: '/therapist/appointments',
 		create: '/therapist/appointments/create',
