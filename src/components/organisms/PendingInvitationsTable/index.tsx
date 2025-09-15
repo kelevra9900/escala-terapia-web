@@ -31,7 +31,7 @@ const PendingInvitationsTable = ({invitations = []}: Props) => {
 			width: 250,
 			render: (_: any,record: FormInvitation) => (
 				<div className="flex items-center space-x-2">
-					<Avatar src={`https://api.dicebear.com/7.x/initials/svg?seed=${record.client.name}`} />
+					<Avatar />
 					<div className="flex flex-col whitespace-nowrap font-medium ms-2">
 						{record.client.name}
 						<span className="text-[13px] font-normal text-gray-500/80">

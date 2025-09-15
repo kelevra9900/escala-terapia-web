@@ -18,7 +18,9 @@ interface HeaderProps {
 
 const Header = ({className}: HeaderProps) => {
 	const anchorRef = useRef<HTMLDivElement>(null)
-	const {data: meInfo} = useGetMeInfo()
+	const {token} = useAuth();
+	const {data: meInfo,isLoading,isFetching} = useGetMeInfo()
+	const isAuthLoading = Boolean(token) && (isLoading || isFetching);
 	// useThemeMode()
 
 	return (
@@ -32,10 +34,15 @@ const Header = ({className}: HeaderProps) => {
 						</div>
 
 						<div className="hidden flex-1 flex-shrink-0 justify-end text-neutral-700 dark:text-neutral-100 md:flex lg:flex-none">
-							{meInfo && (
+							{isAuthLoading ? (
+								<div className="flex items-center gap-x-3">
+									<div className="h-10 w-10 rounded-full bg-neutral-200 dark:bg-neutral-700 animate-pulse" />
+									<div className="hidden lg:block h-9 w-24 rounded-md bg-neutral-200 dark:bg-neutral-700 animate-pulse" />
+								</div>
+							) : meInfo ? (
 								<>
 									<div className="hidden gap-x-1 lg:flex">
-										<AvatarDropdown role={meInfo.role} />
+										<AvatarDropdown role={meInfo.role} name={meInfo.name} email={meInfo.email} />
 									</div>
 									<div className="flex gap-x-2 lg:hidden">
 										<NotifyDropdown />
@@ -43,26 +50,22 @@ const Header = ({className}: HeaderProps) => {
 										<MenuBar />
 									</div>
 								</>
+							) : (
+								<div className="flex items-center gap-x-2">
+									<Link
+										href="/login"
+										className="font-(family-name:--font-inter) flex h-9 items-center justify-center rounded-lg bg-primary-600 px-4 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-offset-neutral-900"
+									>
+										Iniciar sesión
+									</Link>
+									<a
+										href="/signup"
+										className="font-(family-name:--font-inter) flex h-9 items-center justify-center rounded-lg bg-neutral-200 px-4 text-sm font-medium text-neutral-800 hover:bg-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-900"
+									>
+										Registrarse
+									</a>
+								</div>
 							)}
-
-							{
-								!meInfo && (
-									<div className="flex items-center gap-x-2">
-										<Link
-											href="/login"
-											className="font-(family-name:--font-inter) flex h-9 items-center justify-center rounded-lg bg-primary-600 px-4 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-offset-neutral-900"
-										>
-											Iniciar sesión
-										</Link>
-										<a
-											href="/signup"
-											className="font-(family-name:--font-inter) flex h-9 items-center justify-center rounded-lg bg-neutral-200 px-4 text-sm font-medium text-neutral-800 hover:bg-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-900"
-										>
-											Registrarse
-										</a>
-
-									</div>
-								)}
 						</div>
 					</div>
 				</div>

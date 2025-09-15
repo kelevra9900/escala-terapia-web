@@ -105,9 +105,6 @@ export default function Patient() {
 			<div className="flex items-start justify-between border-b border-dashed border-border-base pb-5 md:pb-7">
 				<div className="flex items-center gap-3">
 					<Avatar
-						src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-							patient.name
-						)}`}
 						sizeClass="h-10 w-10"
 					/>
 					<div className="flex flex-col">
@@ -136,9 +133,6 @@ export default function Patient() {
 					<Card className="bg-white dark:bg-dark-1000">
 						<div className="flex items-center gap-3">
 							<Avatar
-								src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-									patient.name
-								)}`}
 								sizeClass="h-12 w-12"
 							/>
 							<div className="flex flex-col">

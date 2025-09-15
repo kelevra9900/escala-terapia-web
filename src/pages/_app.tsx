@@ -20,6 +20,7 @@ import PrivateRoute from "@/utils/privateRoute";
 import defaultSeo from '@/settings/seo.settings';
 import dynamic from "next/dynamic";
 import {useRouter} from 'next/router';
+import {useState} from 'react';
 import {ALLOWED_ROLES,ONLY_ADMIN_ROLE} from '@/utils/constants';
 
 
@@ -35,7 +36,8 @@ const Noop: React.FC<{children?: React.ReactNode}> = ({children}) => (
 export default function App({Component,pageProps}: AppPropsWithLayout) {
   const Layout = (Component as any).Layout || Noop;
   const componentAuthProps = (Component as any).authenticate;
-  const queryClient = new QueryClient()
+  // Keep a single QueryClient instance across renders
+  const [queryClient] = useState(() => new QueryClient());
   const router = useRouter();
 
   // Infer authentication requirements by pathname when the page didn't declare them
