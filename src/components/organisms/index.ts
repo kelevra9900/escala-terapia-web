@@ -9,6 +9,8 @@ export {default as UserTable} from './UserTable';
 export {default as FormTemplateTable} from './FormTemplateTable';
 export {default as ClientTable} from './ClientTable';
 export {default as FormTable} from './FormTable';
+export {default as SectionVideos} from './SectionVideos'
+export {default as ClientSay} from './ClientSay'
 // Layouts
 export {default as AuthLayout} from './Layout/AuthLayout';
 export {default as DashboardLayout} from './Layout/AppLayout';

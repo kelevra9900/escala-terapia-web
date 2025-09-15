@@ -1,12 +1,13 @@
 import {GetServerSideProps} from "next";
 
-import {MainLayout} from "@/components/organisms";
+import {MainLayout,SectionVideos} from "@/components/organisms";
 import {SectionHero,SectionHowItWork,SectionSubscribe,PricingItem} from "@/components/molecules";
 import {BackgroundSection,BgGlassmorphism,Seo} from "@/components/atoms";
 
 import {pricings} from "@/types";
 import {getAuthCredentials} from "@/utils/auth";
 import {useStartSubscription} from "@/hooks/useStartSubscription";
+import SectionClientSay from "@/components/organisms/ClientSay";
 
 export default function Home() {
   const {mutate: startSubscription} = useStartSubscription();
@@ -54,10 +55,15 @@ export default function Home() {
         </div>
 
         <SectionSubscribe />
-
+        {/* 
         <div className="relative py-16">
           <BackgroundSection className="bg-orange-50 dark:bg-black dark:bg-opacity-20" />
-        </div>
+        </div> */}
+
+        <SectionVideos />
+        {/* <div className="relative py-16">
+          <SectionClientSay />
+        </div> */}
       </div>
     </div>
   );
