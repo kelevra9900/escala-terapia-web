@@ -24,7 +24,6 @@ export default class CustomDocument extends Document {
   render() {
     return (
       <Html lang="es">
-        <GoogleAnalytics gaId="G-WDQTLN0HJM" />
 
         <Head>
           <meta name="theme-color" content="#ffffff" />
@@ -33,6 +32,7 @@ export default class CustomDocument extends Document {
           <Main />
           <NextScript />
         </body>
+        <GoogleAnalytics gaId="G-WDQTLN0HJM" />
       </Html>
     );
   }
