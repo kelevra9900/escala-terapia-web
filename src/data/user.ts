@@ -1,10 +1,12 @@
 import {useMutation,useQuery,useQueryClient} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
+import Cookies from 'js-cookie';
 
 import {User,LoginInput,LoginResponseSuccess,PaginatedResponse,UserListItem,CreateUserInput,RegisterInput} from '@/types';
 import {userClient} from './client/user';
 import {getFormErrors} from './client/http-client';
 import {useAuth} from '@/context/AuthContext';
+import {AUTH_CRED} from '@/utils/constants';
 import {showError,showSuccess} from '@/utils/toasts';
 import {useRouter} from 'next/router';
 
@@ -109,11 +111,13 @@ export const useGetUserById = (id: string) => {
 	});
 };
 export const useGetMeInfo = () => {
+	const hasToken = typeof window !== 'undefined' && !!Cookies.get(AUTH_CRED);
 	return useQuery<User>({
 		queryKey: ['me'],
 		queryFn: userClient.getMe,
 		retry: false,
 		staleTime: 1000 * 60 * 5,
+		enabled: hasToken,
 	});
 };
 

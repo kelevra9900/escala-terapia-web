@@ -48,7 +48,7 @@ export default function Home() {
           <section className="overflow-hidden text-sm text-neutral-600 md:text-base">
             <div className="mx-auto max-w-2xl">
               {pricings?.length ? (
-                <PricingItem pricing={pricings[0]} onClick={handleSubscribeClick} key={pricings?.length} />
+                <PricingItem pricing={pricings[0]} onClick={handleSubscribeClick} />
               ) : null}
             </div>
           </section>
