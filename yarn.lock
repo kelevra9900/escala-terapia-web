@@ -357,6 +357,16 @@
   dependencies:
     "@standard-schema/utils" "^0.3.0"
 
+"@hugeicons/core-free-icons@^1.0.17":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@hugeicons/core-free-icons/-/core-free-icons-1.0.17.tgz#7c4f317e330122c32c6ae013806dfc026165dc4a"
+  integrity sha512-+o5GCTJ+JSvYfJtSw7cyQXc9wOkRYa0FywKZAQPsD/lZE0j+3O52fZsAmQLekqViDybI4volujsqLfS+Mi9/SQ==
+
+"@hugeicons/react@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@hugeicons/react/-/react-1.1.1.tgz#e0700535799ddf94dd5d0b18e7e70a58d3306fdc"
+  integrity sha512-BAbFVtx0XZ/yF2poPLFn0N9Ji6ebV/MpI5+WRqooFp3smQDwpL+72m+BBs4KAM5djgWUpg12weyc5SJtTsOwsw==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"

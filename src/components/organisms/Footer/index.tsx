@@ -21,13 +21,13 @@ const navigation: {
 	support: [
 		{name: 'Centro de ayuda',href: '#'},
 		{name: 'Guías de uso',href: '#'},
-		{name: 'Contacto',href: '#'},
+		{name: 'Contacto',href: '/contact'},
 	],
 	company: [
 		{name: 'Quiénes somos',href: '#'},
-		{name: 'Blog clínico',href: '#'},
-		{name: 'Oportunidades laborales',href: '#'},
-		{name: 'Prensa',href: '#'},
+		{name: 'Blog clínico',href: '/blog'},
+		// {name: 'Oportunidades laborales',href: '#'},
+		// {name: 'Prensa',href: '#'},
 	],
 	legal: [
 		{name: 'Términos del servicio',href: '#'},

@@ -11,6 +11,7 @@ export {default as ClientTable} from './ClientTable';
 export {default as FormTable} from './FormTable';
 export {default as SectionVideos} from './SectionVideos'
 export {default as ClientSay} from './ClientSay'
+export {default as SectionGridPosts} from './SectionGridPosts'
 // Layouts
 export {default as AuthLayout} from './Layout/AuthLayout';
 export {default as DashboardLayout} from './Layout/AppLayout';
