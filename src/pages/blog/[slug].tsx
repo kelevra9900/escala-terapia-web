@@ -1,12 +1,15 @@
-import {Avatar,ButtonPrimary,ButtonSecondary,Divider,Loader,Tag,Textarea} from '@/components/atoms'
+import Image from 'next/image'
+import Link from 'next/link'
+import {useRouter} from 'next/router'
+import {ArticleJsonLd} from 'next-seo'
+
+import {Avatar,ButtonPrimary,ButtonSecondary,Divider,Textarea} from '@/components/atoms'
 import {BadgeButton} from '@/components/atoms/BadgeButton'
 import {SocialsList} from '@/components/molecules'
 import {MainLayout} from '@/components/organisms'
 import BlogPostSkeleton from '@/components/organisms/BlogPostSkeleton'
 import {useGetPost} from '@/data/blog'
-import Image from 'next/image'
-import Link from 'next/link'
-import {useRouter} from 'next/router'
+
 
 
 const BlogNote = () => {
@@ -240,33 +243,47 @@ const BlogNote = () => {
 
 
 	return (
-		<div className="pt-8 lg:pt-16 mb-10 justify-center items-center">
-			{renderHeader()}
+		<>
+			<ArticleJsonLd
+				type="BlogPosting"
+				title={post?.title || ''}
+				images={post?.coverImage ? [post.coverImage] : []}
+				description={post?.excerpt || ''}
+				url={`${process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}/blog/${post?.slug}`}
+				authorName={post?.author?.name || 'Escala Terapia'}
+				publisherName="Escala Terapia"
+				publisherLogo={(process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com') + '/logo.png'}
+				datePublished={post?.publishedAt || ''}
+				dateModified={post?.updatedAt || post?.publishedAt || ''}
+			/>
+			<div className="pt-8 lg:pt-16 mb-10 justify-center items-center">
+				{renderHeader()}
 
-			<div className="container my-8 sm:my-12 flex justify-center">
-				{post?.coverImage && (
-					<div className="mx-auto w-full max-w-(--breakpoint-md) overflow-hidden rounded-3xl">
-						<Image
-							alt={post.title || ''}
-							src={post.coverImage}
-							width={1600}
-							height={900}
-							priority
-							className="h-auto w-full object-cover"
-						/>
-					</div>
-				)}
+				<div className="container my-8 sm:my-12 flex justify-center">
+					{post?.coverImage && (
+						<div className="mx-auto w-full max-w-(--breakpoint-md) overflow-hidden rounded-3xl">
+							<Image
+								alt={post.title || ''}
+								src={post.coverImage}
+								width={1600}
+								height={900}
+								priority
+								className="h-auto w-full object-cover"
+							/>
+						</div>
+					)}
+				</div>
+
+				<div className="container flex flex-col items-center gap-y-10">
+					{renderContent()}
+					{renderTags()}
+					<div className="mx-auto w-full max-w-(--breakpoint-md) border-t border-b border-neutral-100 px-4 sm:px-6 dark:border-neutral-700"></div>
+					{renderAuthor()}
+					{renderCommentForm()}
+				</div>
+
 			</div>
-
-			<div className="container flex flex-col items-center gap-y-10">
-				{renderContent()}
-				{renderTags()}
-				<div className="mx-auto w-full max-w-(--breakpoint-md) border-t border-b border-neutral-100 px-4 sm:px-6 dark:border-neutral-700"></div>
-				{renderAuthor()}
-				{renderCommentForm()}
-			</div>
-
-		</div>
+		</>
 	)
 }
 

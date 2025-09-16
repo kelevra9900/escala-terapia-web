@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "@/styles/globals.css";
 import type {AppProps} from "next/app";
-import {DefaultSeo} from 'next-seo';
+import {DefaultSeo, OrganizationJsonLd, SiteLinksSearchBoxJsonLd, LogoJsonLd, NextSeo} from 'next-seo';
 import {
   QueryClient,
   QueryClientProvider,
@@ -59,6 +59,34 @@ export default function App({Component,pageProps}: AppPropsWithLayout) {
         <UIProvider>
           <ModalProvider>
             <DefaultSeo {...defaultSeo} />
+            {/* Global JSON-LD */}
+            <OrganizationJsonLd
+              type="Organization"
+              id={`${process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}/#organization`}
+              name="Escala Terapia"
+              url={process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}
+              logo={(process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com') + '/logo.png'}
+              sameAs={[
+                'https://x.com/escala_terapia',
+              ]}
+            />
+            <LogoJsonLd
+              logo={(process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com') + '/logo.png'}
+              url={process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}
+            />
+            <SiteLinksSearchBoxJsonLd
+              url={process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}
+              potentialActions={[
+                {
+                  target: `${process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}/search?q={search_term_string}`,
+                  queryInput: 'search_term_string',
+                },
+              ]}
+            />
+            {/* Prevent indexing on private areas */}
+            {/^(\/admin|\/dashboard|\/therapist|\/account|\/checkout|\/subscription)(\/|$)/.test(pathname) ? (
+              <NextSeo noindex nofollow />
+            ) : null}
             {finalAuthProps ? (
               <PrivateRoute authProps={finalAuthProps}>
                 <Layout {...pageProps}>

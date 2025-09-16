@@ -12,13 +12,14 @@ type SeoProps = {
 	faviconUrl?: string;
 };
 
+const BASE_URL = (process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com').replace(/\/$/, '');
 const DEFAULTS = {
-	title: 'Escala Terapia',
-	description: 'Formularios clínicos y herramientas digitales para terapeutas y psicólogos.',
-	url: 'https://escala-terapia.com',
-	image: 'https://escala-terapia.com/images/og-default.jpg',
-	siteName: 'Escala Terapia',
-	locale: 'es_MX',
+  title: 'Escala Terapia',
+  description: 'Formularios clínicos y herramientas digitales para terapeutas y psicólogos.',
+  url: BASE_URL,
+  image: `${BASE_URL}/logo.png`,
+  siteName: 'Escala Terapia',
+  locale: 'es_MX',
 };
 
 const Seo = ({
@@ -38,7 +39,7 @@ const Seo = ({
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta charSet="utf-8" />
 		<meta name="robots" content={noIndex ? 'noindex, nofollow' : 'index, follow'} />
-		<link rel="canonical" href={url} />
+	<link rel="canonical" href={url} />
 		{faviconUrl && <link rel="icon" href={faviconUrl} />}
 		{keywords?.length && <meta name="keywords" content={keywords.join(', ')} />}
 

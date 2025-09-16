@@ -21,8 +21,8 @@ export default function Home() {
       <Seo
         title="Escala Terapia | Plataforma de Terapia Psicológica Profesional en Línea"
         description="Accede a sesiones de terapia en línea con profesionales certificados. Agenda fácilmente, responde formularios clínicos y lleva el control de tu progreso emocional."
-        url="https://escala-terapia.com"
-        image="https://escala-terapia.com/images/og-image.jpg"
+        url={process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}
+        image={(process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com') + '/logo.png'}
         keywords={[
           "terapia en línea",
           "terapia psicológica",

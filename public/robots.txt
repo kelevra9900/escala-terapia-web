@@ -1,0 +1,15 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /account
+Disallow: /therapist
+Disallow: /checkout
+Disallow: /subscription
+
+# Host
+Host: https://escalaterapia.com
+
+# Sitemaps
+Sitemap: https://escalaterapia.com/sitemap.xml
