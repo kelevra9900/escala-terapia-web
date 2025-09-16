@@ -5,13 +5,14 @@ import Image from 'next/image'
 export interface SectionHero2Props {
 	className?: string
 	children?: React.ReactNode
+	loading?: boolean
 }
 
-const SectionHero: FC<SectionHero2Props> = ({className = '',children}) => {
+const SectionHero: FC<SectionHero2Props> = ({className = '',children,loading = false}) => {
 	return (
 		<div className={`nc-SectionHero2 relative ${className}`}>
 			<div className="absolute inset-y-0 end-0 w-5/6 flex-grow xl:w-3/4">
-				<Image fill className="object-cover" src={imagePng} alt="hero" />
+				<Image fill className="object-cover" src={imagePng} alt="hero" priority loading={'eager'} />
 			</div>
 			<div className="relative py-14 lg:py-20">
 				<div className="relative inline-flex">
