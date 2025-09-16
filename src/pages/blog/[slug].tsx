@@ -15,9 +15,9 @@ const BlogNote = () => {
 
 	const {data: post,isPending} = useGetPost(slug)
 
-    if (isPending) {
-        return <BlogPostSkeleton />
-    }
+	if (isPending) {
+		return <BlogPostSkeleton />
+	}
 
 
 	const renderHeader = () => {

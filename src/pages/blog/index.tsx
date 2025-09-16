@@ -1,6 +1,6 @@
 import React from 'react'
 import {Metadata} from 'next'
-import {BgGlassmorphism,Loader} from '@/components/atoms'
+import {BgGlassmorphism,Loader,Seo} from '@/components/atoms'
 import {usePaginatedBlogNotes} from '@/data/blog'
 import {MainLayout,SectionGridPosts} from '@/components/organisms'
 import SectionMagazine from '@/components/organisms/SectionMagazine'
@@ -21,6 +21,13 @@ const BlogPage = () => {
 	if (loading) {
 		return (
 			<div>
+				<Seo
+					title='Blog – Escala Terapia'
+					description='Explora nuestro blog con noticias, artículos y guías para terapeutas.'
+					url={`${process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}/blog`}
+					keywords={['psicología','terapia','blog','salud mental','artículos']}
+					noIndex
+				/>
 				<BgGlassmorphism />
 				<div className="relative">
 					<div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-12 lg:pt-16 pb-10 lg:pb-16">
