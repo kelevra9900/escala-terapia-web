@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "@/styles/globals.css";
 import type {AppProps} from "next/app";
-import {DefaultSeo, OrganizationJsonLd, SiteLinksSearchBoxJsonLd, LogoJsonLd, NextSeo} from 'next-seo';
+import {DefaultSeo,OrganizationJsonLd,SiteLinksSearchBoxJsonLd,LogoJsonLd,NextSeo} from 'next-seo';
 import {
   QueryClient,
   QueryClientProvider,
@@ -42,13 +42,13 @@ export default function App({Component,pageProps}: AppPropsWithLayout) {
 
   // Infer authentication requirements by pathname when the page didn't declare them
   const pathname = router.pathname || '';
-  let inferredAuthProps: { permissions: string[] } | undefined = undefined;
+  let inferredAuthProps: {permissions: string[]} | undefined = undefined;
   if (/^\/admin(\/|$)/.test(pathname)) {
-    inferredAuthProps = { permissions: ONLY_ADMIN_ROLE };
+    inferredAuthProps = {permissions: ONLY_ADMIN_ROLE};
   } else if (/^\/(therapist|dashboard|account)(\/|$)/.test(pathname)) {
-    inferredAuthProps = { permissions: ALLOWED_ROLES };
+    inferredAuthProps = {permissions: ALLOWED_ROLES};
   } else if (/^\/(checkout|subscription)(\/|$)/.test(pathname)) {
-    inferredAuthProps = { permissions: ALLOWED_ROLES };
+    inferredAuthProps = {permissions: ALLOWED_ROLES};
   }
 
   const finalAuthProps = componentAuthProps ?? inferredAuthProps;

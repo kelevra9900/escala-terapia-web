@@ -252,7 +252,7 @@ const BlogNote = () => {
 				url={`${process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com'}/blog/${post?.slug}`}
 				authorName={post?.author?.name || 'Escala Terapia'}
 				publisherName="Escala Terapia"
-				publisherLogo={(process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com') + '/logo.png'}
+				publisherLogo={(process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://escalaterapia.com') + '/logo-square.png'}
 				datePublished={post?.publishedAt || ''}
 				dateModified={post?.updatedAt || post?.publishedAt || ''}
 			/>
