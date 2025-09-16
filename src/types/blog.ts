@@ -51,3 +51,15 @@ export type Comment = {
 	parentId: any
 	author: Author
 }
+
+
+export type CreateBlogNoteInput = {
+	title: string,
+	slug: string,
+	excerpt?: string | null,
+	content: string,
+	coverImage?: string | null,
+	coverImageAlt?: string | null,
+	isFeatured: boolean,
+	categoryId: string
+}

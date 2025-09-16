@@ -1,4 +1,4 @@
-import {BlogNote,BlogPayload} from "@/types/blog";
+import {BlogNote,BlogPayload,CreateBlogNoteInput} from "@/types/blog";
 import {useMutation,useQuery,useQueryClient} from "@tanstack/react-query";
 import {blogClient} from "./client/blog";
 import {PaginatedResponse} from "@/types";
@@ -44,6 +44,23 @@ export const useUpdatePostMutation = () => {
 		onError: (err) => {
 			const formErrors = getFormErrors(err);
 			showError("Error al actualizar la nota")
+			return formErrors;
+		}
+	})
+}
+
+export const useCreatePostMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation<BlogNote,AxiosError,{data: CreateBlogNoteInput}>({
+		mutationFn: ({data}) => blogClient.createBlogPost(data),
+		onSuccess: (data) => {
+			showSuccess("La nota ha sido creada");
+			queryClient.invalidateQueries({queryKey: ['blog']});
+			queryClient.setQueryData(['blog-note', data.id], data);
+		},
+		onError: (err) => {
+			const formErrors = getFormErrors(err);
+			showError("Error al crear la nota");
 			return formErrors;
 		}
 	})

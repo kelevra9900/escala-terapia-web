@@ -1,6 +1,6 @@
 import {HttpClient} from "./http-client"
 
-import {BlogNote,BlogPayload,Comment} from "@/types/blog"
+import {BlogNote,BlogPayload,Comment,CreateBlogNoteInput} from "@/types/blog"
 import {PaginatedResponse} from "@/types"
 
 export const blogClient = {
@@ -20,6 +20,9 @@ export const blogClient = {
 	},
 	deletePost: (id: string) => {
 		return HttpClient.delete(`/blog/posts/${id}`)
+	},
+	createBlogPost: (input: CreateBlogNoteInput) => {
+		return HttpClient.post<BlogNote>('/blog/posts',input)
 	},
 	// Blog - Comments
 	// Create comment on a post (auth required)

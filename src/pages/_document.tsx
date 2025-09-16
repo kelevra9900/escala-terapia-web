@@ -5,6 +5,7 @@ import Document,{
   NextScript,
   DocumentContext,
 } from 'next/document';
+import {GoogleTagManager} from '@next/third-parties/google'
 
 export const metadata = {
   title: "Escala Terapia",
@@ -23,6 +24,7 @@ export default class CustomDocument extends Document {
   render() {
     return (
       <Html lang="es">
+        <GoogleTagManager gtmId="G-WDQTLN0HJM" />
         <Head>
           <meta name="theme-color" content="#ffffff" />
         </Head>
