@@ -106,7 +106,7 @@ export default function Footer() {
 			<div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
 				<div className="xl:grid xl:grid-cols-3 xl:gap-8">
 					<div className="space-y-8">
-						<Logo className="w-20" />
+						<Logo />
 						<p className="text-balance text-sm/6 text-gray-600 dark:text-neutral-400 font-(family-name:--font-inter)">
 							Making the world a better place
 						</p>
