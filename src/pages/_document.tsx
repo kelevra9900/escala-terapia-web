@@ -24,7 +24,7 @@ export default class CustomDocument extends Document {
   render() {
     return (
       <Html lang="es">
-        {/* <script async src="https://www.googletagmanager.com/gtag/js?id=G-WDQTLN0HJM"></script> */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WDQTLN0HJM"></script>
         <Head>
           <meta name="theme-color" content="#ffffff" />
         </Head>
