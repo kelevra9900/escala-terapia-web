@@ -33,7 +33,7 @@ export default function TherapistBlog() {
 						className="w-full"
 					/>
 					<LinkButton
-						href={'#'}
+						href={'/therapist/blog/create'}
 						variant="outline"
 						className="w-full md:w-auto"
 					>
