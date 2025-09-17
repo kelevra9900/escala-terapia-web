@@ -63,3 +63,12 @@ export type CreateBlogNoteInput = {
 	isFeatured: boolean,
 	categoryId: string
 }
+
+export type Categorie = {
+	id: string,
+	name: string,
+	slug: string,
+	description: string,
+	createdAt: string,
+	updatedAt: string
+}

@@ -105,6 +105,11 @@ export const siteSettings = {
 							icon: 'ReviewIcon',
 						},
 						{
+							href: Routes.therapistBlog.overview,
+							label: 'Blog',
+							icon: 'ReviewIcon',
+						},
+						{
 							href: Routes.therapistSettings.forms,
 							label: 'Configuración',
 							icon: 'SettingsIcon',

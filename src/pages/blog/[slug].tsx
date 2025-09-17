@@ -216,7 +216,7 @@ const BlogNote = () => {
 				<div className="nc-SingleAuthor flex">
 					<Avatar />
 					<div className="ml-3 flex max-w-lg flex-col gap-y-1 sm:ml-5">
-						<span className="text-xs tracking-wider text-neutral-400 uppercase">written by</span>
+						<span className="text-xs tracking-wider text-neutral-400 uppercase">Escrito por</span>
 						<h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-200">
 							<a href="#">{post?.author?.name}</a>
 						</h2>
@@ -229,7 +229,7 @@ const BlogNote = () => {
 	const renderCommentForm = () => {
 		return (
 			<div className="mx-auto w-full max-w-(--breakpoint-md) pt-5 px-4 sm:px-6">
-				<h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">Comments (14)</h3>
+				<h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">Comentarios (0)</h3>
 				<form className="mt-5">
 					<Textarea rows={4} />
 					<div className="mt-6 flex gap-x-3">

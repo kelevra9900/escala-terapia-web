@@ -1,6 +1,6 @@
 import {HttpClient} from "./http-client"
 
-import {BlogNote,BlogPayload,Comment,CreateBlogNoteInput} from "@/types/blog"
+import {BlogNote,BlogPayload,Categorie,Comment,CreateBlogNoteInput} from "@/types/blog"
 import {PaginatedResponse} from "@/types"
 
 export const blogClient = {
@@ -46,5 +46,8 @@ export const blogClient = {
 			content,
 			parentId
 		})
+	},
+	getCategories: ({page,limit}: {page: number,limit: number}) => {
+		return HttpClient.get<PaginatedResponse<Categorie>>(`/blog/categories?page=${page}&limit=${limit}`)
 	}
 }

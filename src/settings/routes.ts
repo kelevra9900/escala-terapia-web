@@ -68,7 +68,9 @@ export const Routes = {
 	},
 	therapistMessages: '/therapist/messages',
 	therapistProfile: '/therapist/profile',
-
+	therapistBlog: {
+		overview: '/therapist/blog'
+	},
 	therapistAnalytics: {
 		overview: '/therapist/analytics/overview',
 		forms: '/therapist/analytics/forms',

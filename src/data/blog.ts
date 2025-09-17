@@ -31,6 +31,13 @@ export const useGetPost = (id: string) => {
 	});
 }
 
+export const useGetCategories = ({page = 1,limit = 10}) => {
+	return useQuery({
+		queryKey: ['blog-categories',page,limit],
+		queryFn: () => blogClient.getCategories({page,limit})
+	})
+}
+
 
 export const useUpdatePostMutation = () => {
 	const queryClient = useQueryClient();
@@ -56,7 +63,7 @@ export const useCreatePostMutation = () => {
 		onSuccess: (data) => {
 			showSuccess("La nota ha sido creada");
 			queryClient.invalidateQueries({queryKey: ['blog']});
-			queryClient.setQueryData(['blog-note', data.id], data);
+			queryClient.setQueryData(['blog-note',data.id],data);
 		},
 		onError: (err) => {
 			const formErrors = getFormErrors(err);
