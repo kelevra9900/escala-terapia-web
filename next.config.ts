@@ -35,6 +35,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "trablisa-assets.s3.eu-south-2.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
