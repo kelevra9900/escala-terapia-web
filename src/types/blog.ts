@@ -61,7 +61,8 @@ export type CreateBlogNoteInput = {
 	coverImage?: string | null,
 	coverImageAlt?: string | null,
 	isFeatured: boolean,
-	categoryId: string
+	categoryId: string,
+	coverImageFile?: File | Blob | null
 }
 
 export type Categorie = {

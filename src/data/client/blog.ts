@@ -22,7 +22,42 @@ export const blogClient = {
 		return HttpClient.delete(`/blog/posts/${id}`)
 	},
 	createBlogPost: (input: CreateBlogNoteInput) => {
-		return HttpClient.post<BlogNote>('/blog/posts',input)
+		const {
+			coverImageFile,
+			title,
+			slug,
+			content,
+			categoryId,
+			isFeatured,
+			excerpt,
+			coverImage,
+			coverImageAlt,
+		} = input;
+
+		const formData = new FormData();
+		if (coverImageFile) {
+			formData.append('coverImageFile',coverImageFile);
+		}
+		formData.append('title',title);
+		formData.append('slug',slug);
+		formData.append('content',content);
+		formData.append('categoryId',categoryId);
+		formData.append('isFeatured',isFeatured ? 'true' : 'false');
+		if (excerpt !== undefined && excerpt !== null) {
+			formData.append('excerpt',excerpt);
+		}
+		if (coverImage !== undefined && coverImage !== null) {
+			formData.append('coverImage',coverImage);
+		}
+		if (coverImageAlt !== undefined && coverImageAlt !== null) {
+			formData.append('coverImageAlt',coverImageAlt);
+		}
+
+		return HttpClient.post<BlogNote>('/blog/posts',formData,{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
 	},
 	// Blog - Comments
 	// Create comment on a post (auth required)

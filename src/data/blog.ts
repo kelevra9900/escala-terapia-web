@@ -58,6 +58,7 @@ export const useUpdatePostMutation = () => {
 
 export const useCreatePostMutation = () => {
 	const queryClient = useQueryClient();
+
 	return useMutation<BlogNote,AxiosError,{data: CreateBlogNoteInput}>({
 		mutationFn: ({data}) => blogClient.createBlogPost(data),
 		onSuccess: (data) => {

@@ -1,6 +1,6 @@
 import AppLayout from "@/components/organisms/Layout/AppLayout"
 import {useCreatePostMutation,useGetCategories} from "@/data/blog";
-import {Card,DefaultButton,Description,Input,Textarea,Checkbox,StickyFooterPanel,Select} from "@/components/atoms";
+import {Card,DefaultButton,Description,Input,Textarea,Checkbox,StickyFooterPanel,Select,FileDropzone} from "@/components/atoms";
 import {EditorContent,useEditor} from "@tiptap/react";
 import {BubbleMenu} from '@tiptap/react/menus'
 
@@ -150,6 +150,7 @@ export default function CreateBlogNote() {
 	const {register,handleSubmit,control,setValue,formState: {errors}} = useForm<CreateBlogNoteInput>({
 		defaultValues: {
 			isFeatured: false,
+			coverImageFile: null,
 		}
 	});
 
@@ -195,6 +196,20 @@ export default function CreateBlogNote() {
 						className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
 					/>
 					<Card className="w-full sm:w-8/12 md:w-2/3">
+						<Controller
+							name="coverImageFile"
+							control={control}
+							render={({field}) => (
+								<FileDropzone
+									label="Archivo de portada"
+									description="Arrastra y suelta una imagen o haz clic para seleccionarla. Formatos recomendados: JPG, PNG o WebP."
+									value={(field.value as File | null) ?? null}
+									onChange={file => field.onChange(file)}
+									onRemove={() => field.onChange(null)}
+									accept={{'image/*': []}}
+								/>
+							)}
+						/>
 						<Input
 							label="URL de la portada"
 							placeholder="https://..."

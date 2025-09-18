@@ -4,13 +4,44 @@ import {simplifyUUID} from "@/utils";
 import {AlignType,Table} from "@/components/atoms/Table";
 import {Badge} from "@/components/atoms";
 
-
 type Props = {
-	notes: BlogNote[],
-	meta: Meta,
-	isLoading: boolean;
-	onNoteClick: (id: string) => void;
+    notes: BlogNote[],
+    meta: Meta,
+    isLoading: boolean;
+    onNoteClick: (id: string) => void;
 }
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT?.replace(/\/$/, '') ?? '';
+
+const resolveCoverImageUrl = (src: string | null | undefined) => {
+	if (!src) return '';
+	if (/^https?:/i.test(src)) return src;
+	if (src.startsWith('/')) {
+		return `${API_BASE_URL}${src}`;
+	}
+	return src;
+};
+
+const SkeletonTable = () => {
+	const rows = Array.from({length: 5});
+	return (
+		<div className="mb-6 overflow-hidden rounded shadow bg-white dark:bg-dark-1000">
+			<div className="animate-pulse divide-y divide-gray-100 dark:divide-dark-700">
+				{rows.map((_,index) => (
+					<div key={index} className="grid grid-cols-7 items-center gap-4 px-6 py-4">
+						<div className="h-16 w-20 rounded-md bg-gray-200 dark:bg-dark-700" />
+						<div className="h-3 w-12 rounded-full bg-gray-200 dark:bg-dark-700" />
+						<div className="h-3 w-40 rounded-full bg-gray-200 dark:bg-dark-700" />
+						<div className="h-3 w-24 rounded-full bg-gray-200 dark:bg-dark-700" />
+						<div className="h-6 w-20 rounded-full bg-gray-200 dark:bg-dark-700" />
+						<div className="h-3 w-24 rounded-full bg-gray-200 dark:bg-dark-700" />
+						<div className="h-3 w-16 rounded-full bg-gray-200 dark:bg-dark-700" />
+					</div>
+				))}
+			</div>
+		</div>
+	);
+};
 
 const BlogTable = ({
 	notes,
@@ -18,7 +49,31 @@ const BlogTable = ({
 	isLoading,
 	onNoteClick
 }: Props) => {
-    const columns = [
+	    if (isLoading) {
+	        return <SkeletonTable />;
+	    }
+	    const columns = [
+        {
+            title: 'Portada',
+            dataIndex: 'coverImage',
+            key: 'coverImage',
+            width: 120,
+            align: 'center' as AlignType,
+	            render: (_: string,record: BlogNote) => {
+	                const imageUrl = resolveCoverImageUrl(record.coverImage);
+	                return imageUrl ? (
+	                    <div className="flex items-center justify-center">
+	                        <img
+	                            src={imageUrl}
+	                            alt={record.coverImageAlt || record.title}
+	                            className="h-16 w-20 rounded-md object-cover"
+	                        />
+	                    </div>
+	                ) : (
+	                    <span className="text-gray-400">—</span>
+	                );
+	            },
+	        },
         {
             dataIndex: 'id',
             key: 'id',
