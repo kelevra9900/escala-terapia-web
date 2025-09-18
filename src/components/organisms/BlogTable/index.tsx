@@ -5,10 +5,10 @@ import {AlignType,Table} from "@/components/atoms/Table";
 import {Badge} from "@/components/atoms";
 
 type Props = {
-    notes: BlogNote[],
-    meta: Meta,
-    isLoading: boolean;
-    onNoteClick: (id: string) => void;
+	    notes: BlogNote[],
+	    meta: Meta,
+	    isLoading: boolean;
+	    onNoteClick: (slug: string) => void;
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_REST_API_ENDPOINT?.replace(/\/$/, '') ?? '';
@@ -53,7 +53,7 @@ const BlogTable = ({
 	        return <SkeletonTable />;
 	    }
 	    const columns = [
-        {
+	        {
             title: 'Portada',
             dataIndex: 'coverImage',
             key: 'coverImage',
@@ -134,16 +134,16 @@ const BlogTable = ({
             key: 'actions',
             width: 140,
             align: 'center' as AlignType,
-            render: (_: string,record: BlogNote) => (
-                <button
-                    onClick={() => onNoteClick(record.id)}
-                    className="text-blue-600 hover:text-blue-800"
-                    aria-label="Ver nota"
-                >
-                    Ver
-                </button>
-            ),
-        },
+	            render: (_: string,record: BlogNote) => (
+	                <button
+	                    onClick={() => onNoteClick(record.slug)}
+	                    className="text-blue-600 hover:text-blue-800"
+	                    aria-label="Editar nota"
+	                >
+	                    Editar
+	                </button>
+	            ),
+	        },
     ]
     return (
         <div className="mb-6 overflow-hidden rounded shadow bg-white dark:bg-dark-1000 max-w-full">

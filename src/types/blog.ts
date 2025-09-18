@@ -15,6 +15,7 @@ export interface BlogNote {
 	categoryId: string
 	category: Category
 	author: Author
+	coverImageFile?: File | Blob | null
 }
 
 export interface Category {

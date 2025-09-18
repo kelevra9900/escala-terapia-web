@@ -1,6 +1,6 @@
 import AppLayout from "@/components/organisms/Layout/AppLayout"
-import {useCreatePostMutation,useGetCategories} from "@/data/blog";
-import {Card,DefaultButton,Description,Input,Textarea,Checkbox,StickyFooterPanel,Select,FileDropzone} from "@/components/atoms";
+import {useCreatePostMutation,useGetCategories,useGetPost,useUpdatePostMutation} from "@/data/blog";
+import {Card,DefaultButton,Description,Input,Textarea,Checkbox,StickyFooterPanel,Select,FileDropzone,Loader} from "@/components/atoms";
 import {EditorContent,useEditor} from "@tiptap/react";
 import {BubbleMenu} from '@tiptap/react/menus'
 
@@ -138,7 +138,8 @@ function RichTextEditor({value,onChange,onBlur,error}: RichTextEditorProps) {
 }
 
 export default function CreateBlogNote() {
-	const {mutate,isPending} = useCreatePostMutation()
+	const {mutate: createPost,isPending: isCreating} = useCreatePostMutation()
+	const {mutate: updatePost,isPending: isUpdating} = useUpdatePostMutation()
 	const {data: categories,isPending: loadingCat} = useGetCategories({
 		page: 1,
 		limit: 10
@@ -146,8 +147,13 @@ export default function CreateBlogNote() {
 
 
 	const router = useRouter();
+	const slugParam = typeof router.query.slug === 'string' ? router.query.slug : undefined;
+	const isEditMode = Boolean(slugParam);
+	const {data: existingPost,isPending: isPostLoading,isError: isPostError} = useGetPost(slugParam,{
+		enabled: isEditMode
+	});
 
-	const {register,handleSubmit,control,setValue,formState: {errors}} = useForm<CreateBlogNoteInput>({
+	const {register,handleSubmit,control,setValue,reset,formState: {errors}} = useForm<CreateBlogNoteInput>({
 		defaultValues: {
 			isFeatured: false,
 			coverImageFile: null,
@@ -169,8 +175,43 @@ export default function CreateBlogNote() {
 		setValue('slug',slug);
 	},[title,setValue]);
 
+	useEffect(() => {
+		if (!existingPost) return;
+		reset({
+			title: existingPost.title,
+			slug: existingPost.slug,
+			excerpt: existingPost.excerpt,
+			content: existingPost.content,
+			coverImage: existingPost.coverImage,
+			coverImageAlt: existingPost.coverImageAlt,
+			isFeatured: existingPost.isFeatured,
+			categoryId: existingPost.categoryId,
+			coverImageFile: null,
+		});
+	},[existingPost,reset]);
+
 	const onSubmit = (data: CreateBlogNoteInput) => {
-		mutate({data},{
+		if (isEditMode && existingPost) {
+			const payload = {
+				...existingPost,
+				title: data.title,
+				slug: data.slug,
+				excerpt: data.excerpt ?? '',
+				content: data.content,
+				coverImage: data.coverImage ?? existingPost.coverImage,
+				coverImageAlt: data.coverImageAlt ?? existingPost.coverImageAlt,
+				isFeatured: data.isFeatured,
+				categoryId: data.categoryId,
+				coverImageFile: data.coverImageFile ?? null,
+			};
+			updatePost({data: payload},{
+				onSuccess: () => {
+					setTimeout(() => router.push('/therapist/blog'),300);
+				}
+			});
+			return;
+		}
+		createPost({data},{
 			onSuccess: () => {
 				setTimeout(() => router.push('/therapist/blog'),300);
 			}
@@ -181,10 +222,31 @@ export default function CreateBlogNote() {
 		label: category.name
 	})) ?? [];
 
+	const pageTitle = isEditMode ? 'Editar Nota de Blog' : 'Crear Nota de Blog';
+	const actionLabel = isEditMode ? 'Actualizar Nota' : 'Crear Nota';
+	const busyLabel = isEditMode ? 'Actualizando…' : 'Creando…';
+	const isSubmitting = isCreating || isUpdating;
+
+	if (isEditMode && isPostLoading) {
+		return (
+			<div className="flex items-center justify-center min-h-[50vh]">
+				<Loader simple />
+			</div>
+		);
+	}
+
+	if (isEditMode && isPostError) {
+		return (
+			<div className="flex items-center justify-center min-h-[50vh]">
+				<p className="text-sm text-red-500">No se pudo cargar la nota solicitada.</p>
+			</div>
+		);
+	}
+
 	return (
 		<>
 			<div className="flex border-b border-dashed border-border-base pb-5 md:pb-7">
-				<h1 className="text-lg font-semibold text-heading">Crear Nota de Blog</h1>
+				<h1 className="text-lg font-semibold text-heading">{pageTitle}</h1>
 			</div>
 
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -307,8 +369,8 @@ export default function CreateBlogNote() {
 
 				<StickyFooterPanel className="z-0">
 					<div className="text-end">
-						<DefaultButton type="submit" size="big" disabled={isPending}>
-							{isPending ? 'Creando…' : 'Crear Nota'}
+						<DefaultButton type="submit" size="big" disabled={isSubmitting}>
+							{isSubmitting ? busyLabel : actionLabel}
 						</DefaultButton>
 					</div>
 				</StickyFooterPanel>

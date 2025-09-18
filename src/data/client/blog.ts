@@ -11,7 +11,46 @@ export const blogClient = {
 		return HttpClient.get<BlogNote>(`/blog/posts/${slug}`)
 	},
 	updatePost: (payload: BlogNote) => {
-		return HttpClient.put<BlogNote>(`/blog/posts/${payload.id}`,payload)
+		if (payload.coverImageFile) {
+			const formData = new FormData();
+			formData.append('title',payload.title);
+			formData.append('slug',payload.slug);
+			formData.append('content',payload.content);
+			formData.append('categoryId',payload.categoryId);
+			formData.append('isFeatured',payload.isFeatured ? 'true' : 'false');
+			formData.append('status',payload.status);
+			if (payload.excerpt !== undefined && payload.excerpt !== null) {
+				formData.append('excerpt',payload.excerpt);
+			}
+			if (payload.coverImage !== undefined && payload.coverImage !== null) {
+				formData.append('coverImage',payload.coverImage);
+			}
+			if (payload.coverImageAlt !== undefined && payload.coverImageAlt !== null) {
+				formData.append('coverImageAlt',payload.coverImageAlt);
+			}
+			if (payload.authorId) {
+				formData.append('authorId',payload.authorId);
+			}
+			formData.append('id',payload.id);
+			if (payload.publishedAt) {
+				formData.append('publishedAt',payload.publishedAt);
+			}
+			if (payload.createdAt) {
+				formData.append('createdAt',payload.createdAt);
+			}
+			if (payload.updatedAt) {
+				formData.append('updatedAt',payload.updatedAt);
+			}
+			formData.append('coverImageFile',payload.coverImageFile);
+			return HttpClient.put<BlogNote>(`/blog/posts/${payload.id}`,formData,{
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+		}
+
+		const {coverImageFile: _coverImageFile,...noteData} = payload;
+		return HttpClient.put<BlogNote>(`/blog/posts/${payload.id}`,noteData);
 	},
 	changeStatus: ({id,status}: {id: string,status: string}) => {
 		return HttpClient.patch<BlogNote>(`/blog/posts/${id}/status`,{

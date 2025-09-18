@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useRouter} from "next/router";
 import {Card,LinkButton,PageHeading,TextLabel} from "@/components/atoms";
 import AppLayout from "@/components/organisms/Layout/AppLayout";
 import {usePaginatedBlogNotes} from "@/data/blog";
@@ -10,6 +11,7 @@ import {PlusIcon} from "@heroicons/react/24/solid";
 export default function TherapistBlog() {
 	const [page,setPage] = useState(1);
 	const [limit] = useState(10);
+	const router = useRouter();
 
 	const {data: posts,isPending} = usePaginatedBlogNotes({
 		page,
@@ -48,7 +50,9 @@ export default function TherapistBlog() {
 					notes={posts?.data ?? []}
 					meta={posts?.meta ?? {totalCount: 0,totalPages: 0,currentPage: page,pageSize: limit}}
 					isLoading={isPending}
-					onNoteClick={() => { }}
+					onNoteClick={slug => {
+						router.push(`/therapist/blog/create?slug=${slug}`);
+					}}
 				/>
 
 				{!!posts?.meta?.totalCount && posts.meta.totalCount > 0 && (

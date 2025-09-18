@@ -24,10 +24,20 @@ export const usePaginatedBlogNotes = ({page = 1,limit,search,categoryId}: BlogPa
 	})
 }
 
-export const useGetPost = (id: string) => {
+type UseGetPostOptions = {
+	enabled?: boolean;
+};
+
+export const useGetPost = (id?: string,options?: UseGetPostOptions) => {
 	return useQuery<BlogNote>({
 		queryKey: ['blog-note',id],
-		queryFn: () => blogClient.getPost(id)
+		queryFn: () => {
+			if (!id) {
+				throw new Error('Post id is required');
+			}
+			return blogClient.getPost(id);
+		},
+		enabled: Boolean(id) && (options?.enabled ?? true),
 	});
 }
 

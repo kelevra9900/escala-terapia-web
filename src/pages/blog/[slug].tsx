@@ -14,11 +14,12 @@ import {useGetPost} from '@/data/blog'
 
 const BlogNote = () => {
 	const router = useRouter();
-	const slug = String(router.query.slug || '');
+	const slug = typeof router.query.slug === 'string' ? router.query.slug : undefined;
 
 	const {data: post,isPending} = useGetPost(slug)
+	const isLoadingPost = isPending || !slug;
 
-	if (isPending) {
+	if (isLoadingPost) {
 		return <BlogPostSkeleton />
 	}
 
